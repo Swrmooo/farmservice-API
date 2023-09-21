@@ -1,0 +1,15 @@
+# fly.toml app configuration file generated for btfarmservice on 2023-09-21T19:09:14+07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "btfarmservice"
+primary_region = "sin"
+
+[http_service]
+  internal_port = 8090
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
