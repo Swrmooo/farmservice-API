@@ -1,4 +1,4 @@
-module btfarmservice
+module farmservice
 
 go 1.19
 
@@ -17,5 +17,6 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.49.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
+	github.com/ziutek/mymysql v1.5.4 // indirect
 	golang.org/x/sys v0.12.0 // indirect
 )

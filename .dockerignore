@@ -1,0 +1,10 @@
+# flyctl launch added from .gitignore
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+logs
+logs_alltime
+files
+
+**/btfarmservice.exe*
+**/btfarmservice*
+fly.toml

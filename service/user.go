@@ -1,37 +1,26 @@
 package service
 
 import (
-  "btfarmservice/middleware"
-  "btfarmservice/lib"
+  "farmservice/middleware"
+  "farmservice/lib"
+  //"farmservice/lib/db"
+  "farmservice/bu"
   "github.com/gofiber/fiber/v2"
 )
 
 func User_Login(c *fiber.Ctx) error {
-  r, err :=  middleware.Payload(c, "User_Login")
-  if err != nil { return err }
+  r :=  middleware.GetAnonymousRequestToken(c, "fs", "User_Login")
 
-  if lib.T(r.Payload, "username") != "admin" {
-    return r.Error("", "Invalid username or password")
+  if lib.T(r.Payload, "username") == "" {
+    panic("Please input username")
+  }else if lib.T(r.Payload, "password") == "" {
+    panic("Please input password")
   }
 
-  info := map[string]interface{}{}
-  info["username"] = lib.T(r.Payload, "username")
-
-  return r.Success(info)
-}
-
-
-func User_Register(c *fiber.Ctx) error {
-  operation := "User_Register"
-  payload, user, err :=  middleware.Payload(c, operation)
-  if err != nil { return err }
-
-  if lib.T(payload, "name") == "" {
-    return middleware.Error(c, operation, user, "", "Name is required")
+  if user := bu.User_Login( lib.T(r.Payload, "username"), lib.T(r.Payload, "password") ); user != nil {
+    return r.Success(user)
+  }else{
+    panic("error.IncorrectLogin")
   }
 
-  info := map[string]interface{}{}
-  info["name"] = lib.T(payload, "name")
-
-  return middleware.Success(c, operation, user, info)
 }

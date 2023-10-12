@@ -1,20 +1,23 @@
 package main
 
 import (
-  "btfarmservice/middleware"
-  "btfarmservice/service"
+  "farmservice/middleware"
+  "farmservice/service"
+  "farmservice/lib/db"
   "github.com/gofiber/fiber/v2"
   "github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
 
-  /*
-    DB_server := "clouddb01.bestgeosystem.com"
-    DB_port := "10012"
-    DB_user := "farmserviceapp"
-    DB_pass := "@farmserviceappDB997"
-  */
+    db.DB_Connections = map[string]map[string]string{
+      "fs" : map[string]string{
+        "server" : "clouddb01.bestgeosystem.com:10012",
+        "user" : "farmserviceapp",
+        "pass" : "BT@farmservice893",
+        "dbname" : "btfarmservice_db",
+      },
+    }
 
     app := fiber.New()
 
@@ -25,9 +28,12 @@ func main() {
     }))
 
     app.Use(middleware.JSONOnly)
+    app.Use(middleware.HandleErrors)
 
-    app.Post("/login", service.User_Login)
-    app.Post("/register", service.User_Register)
+    app.Post("/user/login", service.User_Login)
+    app.Post("/example/query", service.Example_Query)
+    app.Post("/example/update", service.Example_Update)
+    app.Post("/example/transaction", service.Example_Transaction)
 
     app.Listen(":8090")
 }
