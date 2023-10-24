@@ -6,4 +6,14 @@ var TH map[string]string = map[string]string{
   "error.TokenNotFound" : "User token not found",
   "error.IncorrectLogin" : "Username หรือ Password ไม่ถูกต้อง",
   "error.OperationFailed" : "Operation Failed !!!",
+  "error.JsonFailed" : "Json Failed !!!",
+  "error.ContactAdmin" : "ไม่สามารถดำเนินการได้ กรุณาติดต่อผู้ดูแลระบบ",
+
+  "require.Id" : "ไม่พบข้อมูล ID",
+  "require.Name" : "กรุณาระบุชื่อ",
+  "require.Username" : "กรุณาระบุชื่อผู้ใช้งานหรือเบอร์โทร",
+  "require.Phone" : "กรุณาระบุเบอร์โทร",
+  "require.Password" : "กรุณาระบุรหัสผ่าน",
+
+  "require.Plot.PlotType": "กรุณาระบุประเภทแปลง",
 }

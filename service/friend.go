@@ -1,9 +1,8 @@
 package service
 
 import (
-	"farmservice/lib"
-	_ "farmservice/lib"
-	"farmservice/lib/db"
+	//lib "github.com/ttoonn112/ktgolib"
+	//"github.com/ttoonn112/ktgolib/db"
 	"farmservice/middleware"
 	_ "farmservice/middleware"
 

@@ -5,6 +5,6 @@ logs
 logs_alltime
 files
 
-**/btfarmservice.exe*
-**/btfarmservice*
+**/farmservice.exe*
+**/farmservice*
 fly.toml

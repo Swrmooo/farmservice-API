@@ -1,24 +1,52 @@
 package bu
 
 import (
-	//"farmservice/lib"
-	"farmservice/lib/db"
+	"crypto/md5"
+	"encoding/hex"
+	lib "github.com/ttoonn112/ktgolib"
+	"github.com/ttoonn112/ktgolib/db"
 	"farmservice/sqlstring"
+	"fmt"
 )
 
-// func User_Login(username string, pass string) map[string]interface{} {
-//   if users := db.Query("fs", sqlstring.User_Login(username, pass)); len(users) == 1 {
-//     return users[0]
-//   }else {
-//     return nil
-//   }
-// }
+func User_Login(username string, pass string) map[string]interface{} {
+	encodedPass := md5.Sum([]byte(pass))
+	passMd5 := hex.EncodeToString(encodedPass[:])
+	fmt.Println("Encoded Password: ", passMd5)
 
-func User_Login(tel string, pass string) map[string]interface{} {
-	users := db.Query("fs", sqlstring.User_Login(tel, pass))
-	if len(users) == 1 {
-		return users[0]
-	} else {
-		return nil
+	if result := db.Query("fs", sqlstring.User_CheckLogin(username, passMd5)); len(result) == 1 {
+		id := lib.T(result, "id")
+		token := lib.T(result, "username")+"-"+lib.GenerateRandomString(60)		//Generate token
+		db.Execute("fs", sqlstring.User_UpdateTokenFromId(id, token))
+		return User_Profile(id)
 	}
+
+	return nil
+}
+
+func User_Detail(id string) map[string]interface{} {
+	if users := db.Query("fs", sqlstring.User_GetFromId(id)); len(users) == 1 {
+		return users[0]
+	}else{
+		panic("error.ContactAdmin")
+	}
+	return nil
+}
+
+func User_List(filter string) []map[string]interface{} {
+	list := db.Query("fs", sqlstring.User_GetFromFilter(filter))
+	//for k,v := range list {
+	//	do something
+	//}
+	return list
+}
+
+func User_Create(trans *db.Transaction, tel string) string {
+	trans.Execute(sqlstring.User_CreateWithPhone(tel))
+	if users := trans.Query(sqlstring.User_GetFromPhone(tel)); len(users) == 1 {
+		return lib.T(users[0], "id")
+	}else{
+		panic("error.ContactAdmin")
+	}
+	return nil
 }

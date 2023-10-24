@@ -1,10 +1,9 @@
 package service
 
 import (
-	"farmservice/lib"
-	"farmservice/lib/db"
+	//lib "github.com/ttoonn112/ktgolib"
+	"github.com/ttoonn112/ktgolib/db"
 	"farmservice/middleware"
-
 	"github.com/gofiber/fiber/v2"
 )
 
