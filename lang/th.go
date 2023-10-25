@@ -10,7 +10,7 @@ var TH map[string]string = map[string]string{
   "error.ContactAdmin" : "ไม่สามารถดำเนินการได้ กรุณาติดต่อผู้ดูแลระบบ",
 
   "require.Id" : "ไม่พบข้อมูล ID",
-  "require.Name" : "กรุณาระบุชื่อ",
+  "require.Name" : "กรุณาระบุชื่อ-นามสกุล",
   "require.Username" : "กรุณาระบุชื่อผู้ใช้งานหรือเบอร์โทร",
   "require.Phone" : "กรุณาระบุเบอร์โทร",
   "require.Password" : "กรุณาระบุรหัสผ่าน",
