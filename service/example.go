@@ -1,7 +1,7 @@
 package service
 
 import (
-	//lib "github.com/ttoonn112/ktgolib"
+	lib "github.com/ttoonn112/ktgolib"
 	"github.com/ttoonn112/ktgolib/db"
 	"farmservice/middleware"
 	"github.com/gofiber/fiber/v2"

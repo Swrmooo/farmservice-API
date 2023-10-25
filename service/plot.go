@@ -1,6 +1,7 @@
 package service
 
 import (
+	"farmservice/sqlstring"
 	"farmservice/middleware"
 	"farmservice/bu"
 	lib "github.com/ttoonn112/ktgolib"
@@ -59,7 +60,7 @@ func Plot_Update(c *fiber.Ctx) error {
 	trans.Commit()
 	trans.Close()
 
-	detail = bu.Plot_Detail(id)
+	detail := bu.Plot_Detail(id)
 
 	return r.Success(detail)
 }

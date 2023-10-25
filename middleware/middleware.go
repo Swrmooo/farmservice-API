@@ -2,6 +2,7 @@ package middleware
 
 import (
   "time"
+  "strings"
   "farmservice/sqlstring"
   "farmservice/lang"
   "github.com/ttoonn112/ktgolib/db"
@@ -101,13 +102,16 @@ func GetRequestToken(c *fiber.Ctx, conn string, operation string, allowAnonymous
   // Get user from token
   var user map[string]interface{}
   token := c.Get("Authorization")
+  if lib.FirstXChar(token, 7) == "Bearer " {
+    token = strings.Replace(token, "Bearer ", "", 1)
+  }
   if token != "" {
     if users := db.Query(conn, sqlstring.User_GetFromToken(token)); len(users) == 1 {
       user = users[0]
       db.Query(conn, sqlstring.User_UpdateTokenTime(token))
     }
   }
-  if allowAnonymous == false && (user == nil || lib.T(user, "token") == "") {
+  if allowAnonymous == false && user == nil {
     panic("error.TokenNotFound")
   }
 

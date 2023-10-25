@@ -1,16 +1,11 @@
 package service
 
 import (
-	//lib "github.com/ttoonn112/ktgolib"
-	//"github.com/ttoonn112/ktgolib/db"
 	"farmservice/middleware"
-	_ "farmservice/middleware"
-
-	//"farmservice/lib/db"
-	_ "farmservice/bu"
-
+	//"farmservice/bu"
+	lib "github.com/ttoonn112/ktgolib"
+	"github.com/ttoonn112/ktgolib/db"
 	"github.com/gofiber/fiber/v2"
-	_ "github.com/gofiber/fiber/v2"
 )
 
 func Friend_Update(c *fiber.Ctx) error {

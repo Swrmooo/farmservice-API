@@ -1,6 +1,7 @@
 package service
 
 import (
+	"farmservice/sqlstring"
 	"farmservice/middleware"
 	"farmservice/bu"
 	lib "github.com/ttoonn112/ktgolib"
@@ -76,9 +77,9 @@ func User_Detail(c *fiber.Ctx) error {
 	id := lib.T(r.Payload, "id")
 	if id == "" { panic("require.Id") }
 
-	profile := bu.User_Detail(id)
+	detail := bu.User_Detail(id)
 
-	return r.Success(profile)										// ตอบกลับ Success พร้อมค่า profile
+	return r.Success(detail)										// ตอบกลับ Success พร้อมค่า profile
 }
 
 func User_Update(c *fiber.Ctx) error {
@@ -114,9 +115,9 @@ func User_Update(c *fiber.Ctx) error {
 	trans.Close()
 
 	// ดึงข้อมูล User Profile จาก ID
-	profile = bu.User_Detail(id)
+	detail := bu.User_Detail(id)
 
-	return r.Success(profile)										// ตอบกลับ Success พร้อมค่า profile
+	return r.Success(detail)										// ตอบกลับ Success พร้อมค่า profile
 }
 
 func User_Delete(c *fiber.Ctx) error {

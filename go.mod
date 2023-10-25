@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/gofiber/fiber/v2 v2.49.2
 	github.com/golang-jwt/jwt v3.2.2+incompatible
-	github.com/ttoonn112/ktgolib v0.1.1
+	github.com/ttoonn112/ktgolib v0.0.0-20231024180844-7b66f9d64b54
 )
 
 require (

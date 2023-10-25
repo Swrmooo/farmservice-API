@@ -15,10 +15,12 @@ func User_Login(username string, pass string) map[string]interface{} {
 	fmt.Println("Encoded Password: ", passMd5)
 
 	if result := db.Query("fs", sqlstring.User_CheckLogin(username, passMd5)); len(result) == 1 {
-		id := lib.T(result, "id")
-		token := lib.T(result, "username")+"-"+lib.GenerateRandomString(60)		//Generate token
+		id := lib.T(result[0], "id")
+		token := lib.T(result[0], "username")+"-"+lib.GenerateRandomString(60)		//Generate token
 		db.Execute("fs", sqlstring.User_UpdateTokenFromId(id, token))
-		return User_Profile(id)
+		detail := User_Detail(id)
+		detail["token"] = token
+		return detail
 	}
 
 	return nil
@@ -41,12 +43,11 @@ func User_List(filter string) []map[string]interface{} {
 	return list
 }
 
-func User_Create(trans *db.Transaction, tel string) string {
+func User_Create(trans db.Transaction, tel string) string {
 	trans.Execute(sqlstring.User_CreateWithPhone(tel))
 	if users := trans.Query(sqlstring.User_GetFromPhone(tel)); len(users) == 1 {
 		return lib.T(users[0], "id")
 	}else{
 		panic("error.ContactAdmin")
 	}
-	return nil
 }
