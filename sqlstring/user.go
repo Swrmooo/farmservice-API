@@ -30,7 +30,7 @@ func user_get() string {
 
 func User_GetFromToken(token string) string {
 	sql := user_get()
-	sql += " token = '" + token + "' "
+	sql += " token = '" + token + "' and token_expire_time >= NOW() "
 	return sql
 }
 
