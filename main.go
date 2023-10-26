@@ -3,26 +3,14 @@ package main
 import (
 	"farmservice/middleware"
 	"farmservice/service"
-	"github.com/ttoonn112/ktgolib/db"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/ttoonn112/ktgolib/db"
 	//_ "log"
 	//_ "gorm.io/driver/mysql"
 	//_ "gorm.io/gorm"
 )
-
-// var Db *gorm.DB
-// var err error
-
-// func InitDB() {
-// 	dsn := "farmserviceapp:BT@farmservice893@tcp(clouddb01.bestgeosystem.com:10012)/btfarmservice_db"
-// 	Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
-// 	if err != nil {
-// 		log.Fatalf("Failed to connect to database: %v ", err)
-// 	}
-
-// 	// Db.AutoMigrate(&User{})
-// }
 
 func main() {
 
@@ -34,7 +22,6 @@ func main() {
 			"dbname": "btfarmservice_db",
 		},
 	}
-	// InitDB()
 
 	app := fiber.New()
 
@@ -48,29 +35,34 @@ func main() {
 	app.Use(middleware.HandleErrors)
 
 	app.Post("/user/login", service.User_Login)
-	app.Post("/user/profile", service.User_Profile)									// Get ข้อมูล user ที่ login ปัจจุบัน
-	app.Post("/user/updateprofile", service.User_UpdateProfile)			// Update ข้อมูล user ที่ login ปัจจุบัน เช่น ชื่อ, นามสกุล
-	app.Post("/user/list", service.User_List)												// รายการ User ในระบบ ใช้สำหรับ Admin (บน Web)
-	app.Post("/user/detail", service.User_Detail)										// Get ข้อมูล user จาก Id (ใช้ร่วมกับ /user/list)
-	app.Post("/user/update", service.User_Update)										// Update ข้อมูล user จาก Id (ใช้ร่วมกับ /user/list)
-	app.Post("/user/delete", service.User_Delete)										// Delete ข้อมูล user จาก Id (ใช้ร่วมกับ /user/list)
+	app.Post("/user/profile", service.User_Profile)             // Get ข้อมูล user ที่ login ปัจจุบัน
+	app.Post("/user/updateprofile", service.User_UpdateProfile) // Update ข้อมูล user ที่ login ปัจจุบัน เช่น ชื่อ, นามสกุล
+	app.Post("/user/list", service.User_List)                   // รายการ User ในระบบ ใช้สำหรับ Admin (บน Web)
+	app.Post("/user/detail", service.User_Detail)               // Get ข้อมูล user จาก Id (ใช้ร่วมกับ /user/list)
+	app.Post("/user/update", service.User_Update)               // Update ข้อมูล user จาก Id (ใช้ร่วมกับ /user/list)
+	app.Post("/user/delete", service.User_Delete)               // Delete ข้อมูล user จาก Id (ใช้ร่วมกับ /user/list)
 
 	app.Post("/plot/list", service.Plot_List)
 	app.Post("/plot/detail", service.Plot_Detail)
 	app.Post("/plot/update", service.Plot_Update)
 	app.Post("/plot/delete", service.Plot_Delete)
 
-/*
-	app.Post("/friend/list", service.Friend_List)
-	app.Post("/friend/detail", service.Friend_Detail)
-	app.Post("/friend/update", service.Friend_Update)
-	app.Post("/friend/delete", service.Friend_Delete)
+	app.Post("/vehicle/list", service.Vehicle_List)
+	app.Post("/vehicle/detail", service.Vehicle_Detail)
+	app.Post("/vehicle/update", service.Vehicle_Update)
+	app.Post("/vehicle/delete", service.Vehicle_Delete)
 
-	app.Post("/plan/list", service.Plan_List)
-	app.Post("/plan/detail", service.Plan_Detail)
-	app.Post("/plan/update", service.Plan_Update)
-	app.Post("/plan/delete", service.Plan_Delete)
-*/
+	/*
+		app.Post("/friend/list", service.Friend_List)
+		app.Post("/friend/detail", service.Friend_Detail)
+		app.Post("/friend/update", service.Friend_Update)
+		app.Post("/friend/delete", service.Friend_Delete)
+
+		app.Post("/plan/list", service.Plan_List)
+		app.Post("/plan/detail", service.Plan_Detail)
+		app.Post("/plan/update", service.Plan_Update)
+		app.Post("/plan/delete", service.Plan_Delete)
+	*/
 
 	app.Post("/user/friend", service.Friend_Update)
 	app.Post("/example/query", service.Example_Query)

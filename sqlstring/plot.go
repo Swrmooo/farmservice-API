@@ -29,14 +29,14 @@ func Plot_GetFromFilter(filter string) string {
 }
 
 func Plot_Create(code string, userId string) string {
-	sql := " insert into plot (code, doc_date, user_id) values ('"+code+"', '"+lib.NowDate()+"', '"+userId+"'); "
+	sql := " insert into plot (code, doc_date, user_id) values ('" + code + "', '" + lib.NowDate() + "', '" + userId + "'); "
 	return sql
 }
 
 func plot_update(data map[string]interface{}) string {
 	sql := " UPDATE plot set "
-	for k,_ := range data {
-		sql += " "+k+" = '"+lib.T(data, k)+"', "
+	for k, _ := range data {
+		sql += " " + k + " = '" + lib.T(data, k) + "', "
 	}
 	sql += " last_updated_time = NOW() "
 	sql += " WHERE "

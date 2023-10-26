@@ -75,3 +75,15 @@ func Plot_Delete(c *fiber.Ctx) error {
 
 	return r.Success(nil)
 }
+
+//Array delete
+// func Plot_Delete(c *fiber.Ctx) error {
+// 	r := middleware.GetUserRequestToken(c, "fs", "Plot_Delete")
+
+// 	id := lib.T(r.Payload, "id")
+// 	if id == "" { panic("require.Id") }
+
+// 	db.Execute(r.Conn, sqlstring.Plot_DeleteFromId(id))
+
+// 	return r.Success(nil)
+// }
