@@ -52,6 +52,20 @@ func main() {
 	app.Post("/vehicle/update", service.Vehicle_Update)
 	app.Post("/vehicle/delete", service.Vehicle_Delete)
 
+	app.Post("/driver/list", service.Driver_List)
+	app.Post("/driver/detail", service.Driver_Detail)
+	app.Post("/driver/update", service.Driver_Update)
+	app.Post("/driver/delete", service.Driver_Delete)
+
+	app.Post("/friend/list", service.Friend_List)
+	app.Post("/friend/detail", service.Friend_Detail)
+	app.Post("/friend/update", service.Friend_Update)
+	app.Post("/friend/delete", service.Friend_Delete)
+
+	app.Post("/plan/list", service.Plan_List)
+	app.Post("/plan/detail", service.Plan_Detail)
+	app.Post("/plan/update", service.Plan_Update)
+	app.Post("/plan/delete", service.Plan_Delete)
 	/*
 		app.Post("/friend/list", service.Friend_List)
 		app.Post("/friend/detail", service.Friend_Detail)

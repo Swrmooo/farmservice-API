@@ -6,8 +6,14 @@ import (
 
 func Vehicle_get() string {
 	//sql := " SELECT id, code, vehicle_type, doc_date name, detail FROM vehicles "
-	sql := " SELECT id, vehicle, num, driver, model, vehicle_type, brand FROM vehicles "
+	sql := " SELECT id, user_id, vehicle, num, driver, model, vehicle_type, brand FROM vehicles "
 	sql += " WHERE "
+	return sql
+}
+
+func Vehicle_GetFromUserId(id string) string {
+	sql := Vehicle_get()
+	sql += " id = '" + id + "' "
 	return sql
 }
 

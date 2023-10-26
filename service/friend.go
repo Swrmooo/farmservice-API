@@ -1,46 +1,89 @@
 package service
 
 import (
+	"farmservice/bu"
 	"farmservice/middleware"
-	//"farmservice/bu"
+	"farmservice/sqlstring"
+
+	"github.com/gofiber/fiber/v2"
 	lib "github.com/ttoonn112/ktgolib"
 	"github.com/ttoonn112/ktgolib/db"
-	"github.com/gofiber/fiber/v2"
 )
 
-func Friend_Update(c *fiber.Ctx) error {
-	r := middleware.GetAnonymousRequestToken(c, "fs", "Friend_Update")
+func Friend_List(c *fiber.Ctx) error {
+	r := middleware.GetUserRequestToken(c, "fs", "Friend_List")
 
-	var inputData struct {
-		FirstName string `json:"firstname"`
-		LastName  string `json:"lastname"`
-		Tel       string `json:"tel"`
-	}
+	// ค้นหา User จาก member, tel
+	filters := lib.GetMask(r.Payload, []string{"start_date", "end_date", "tel", "user_id"})
+	filter := " id <> 0 "
+	filter += lib.AddSqlDateRangeFilter("doc_date", lib.T(filters, "start_date"), lib.T(filters, "end_date"))
+	filter += lib.AddSqlFilter("tel", lib.T(filters, "tel"))
+	filter += lib.AddSqlFilter("user_id", lib.T(filters, "user_id"))
 
-	if err := c.BodyParser(&inputData); err != nil {
-		panic("Failed to parse JSON: " + err.Error())
-	}
+	list := bu.Friend_List(filter)
+
+	return r.Success(list)
+}
+
+func Friend_Detail(c *fiber.Ctx) error {
+	r := middleware.GetUserRequestToken(c, "fs", "Friend_Detail")
 
 	id := lib.T(r.Payload, "id")
+	if id == "" {
+		panic("require.Id")
+	}
+
+	detail := bu.Friend_Detail(id)
+
+	return r.Success(detail)
+}
+
+func Friend_Update(c *fiber.Ctx) error {
+	r := middleware.GetUserRequestToken(c, "fs", "Friend_Update")
+
+	id := lib.T(r.Payload, "id")
+	// if lib.T(r.Payload, "tel") == "" {
+	// 	panic("require.PhoneNumber")
+	// } else if lib.T(r.Payload, "firstname") == "" {
+	// 	panic("require.Firstname")
+	// } else if lib.T(r.Payload, "lastname") == "" {
+	// 	panic("require.Lastname")
+	// }
+
+	payload := lib.GetMask(r.Payload, []string{"num", "firstname", "lastname", "tel", "mood", "pics"})
+
+	// Start transaction
+	trans := db.OpenTrans(r.Conn)
+	defer middleware.TryCatch(func(errStr string) {
+		trans.Rollback()
+		trans.Close()
+		panic(errStr)
+	})
 
 	if id == "" {
-		panic("Id is not found")
+		id = bu.Friend_Create(trans, lib.T(r.User, "id"))
 	}
 
-	sql := "update users set "
+	trans.Execute(sqlstring.Friend_UpdateFromId(id, payload))
 
-	if inputData.FirstName != "" {
-		sql += " first_name = '" + inputData.FirstName + "', "
+	// End transaction
+	trans.Commit()
+	trans.Close()
+
+	detail := bu.Friend_Detail(id)
+
+	return r.Success(detail)
+}
+
+func Friend_Delete(c *fiber.Ctx) error {
+	r := middleware.GetUserRequestToken(c, "fs", "Friend_Delete")
+
+	id := lib.T(r.Payload, "id")
+	if id == "" {
+		panic("require.Id")
 	}
 
-	if inputData.LastName != "" {
-		sql += " last_name = '" + inputData.LastName + "', "
-	}
-
-	sql += " token_expire_time = NOW() "
-	sql += " where id = '" + id + "' "
-
-	db.Execute(r.Conn, sql)
+	db.Execute(r.Conn, sqlstring.Friend_DeleteFromId(id))
 
 	return r.Success(nil)
 }

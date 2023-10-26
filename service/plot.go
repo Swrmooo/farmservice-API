@@ -17,6 +17,7 @@ func Plot_List(c *fiber.Ctx) error {
 	filter := " id <> 0 "
 	filter += lib.AddSqlDateRangeFilter("doc_date", lib.T(filters, "start_date"), lib.T(filters, "end_date"))
 	filter += lib.AddSqlFilter("plot_type", lib.T(filters, "plot_type"))
+	filter += lib.AddSqlFilter("user_id", lib.T(filters, "user_id"))
 
 	list := bu.Plot_List(filter)
 

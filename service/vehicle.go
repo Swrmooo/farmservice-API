@@ -14,10 +14,11 @@ func Vehicle_List(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Vehicle_List")
 
 	// ค้นหา User จาก member, tel
-	filters := lib.GetMask(r.Payload, []string{"start_date", "end_date", "vehicle_type"})
+	filters := lib.GetMask(r.Payload, []string{"start_date", "end_date", "vehicle_type", "user_id"})
 	filter := " id <> 0 "
 	filter += lib.AddSqlDateRangeFilter("doc_date", lib.T(filters, "start_date"), lib.T(filters, "end_date"))
 	filter += lib.AddSqlFilter("vehicle_type", lib.T(filters, "vehicle_type"))
+	filter += lib.AddSqlFilter("user_id", lib.T(filters, "user_id"))
 
 	list := bu.Vehicle_List(filter)
 
