@@ -14,11 +14,12 @@ func Vehicle_List(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Vehicle_List")
 
 	// ค้นหา User จาก member, tel
-	filters := lib.GetMask(r.Payload, []string{"start_date", "end_date", "vehicle_type", "user_id"})
+	filters := lib.GetMask(r.Payload, []string{"start_date", "end_date", "vehicle_type", "vehicle", "user_id"})
 	filter := " id <> 0 "
 	filter += lib.AddSqlDateRangeFilter("doc_date", lib.T(filters, "start_date"), lib.T(filters, "end_date"))
 	filter += lib.AddSqlFilter("vehicle_type", lib.T(filters, "vehicle_type"))
 	filter += lib.AddSqlFilter("user_id", lib.T(filters, "user_id"))
+	filter += lib.AddSqlFilter("vehicle", lib.T(filters, "vehicle"))
 
 	list := bu.Vehicle_List(filter)
 
@@ -46,7 +47,7 @@ func Vehicle_Update(c *fiber.Ctx) error {
 		panic("require.Vehicle.VehicleType")
 	}
 
-	payload := lib.GetMask(r.Payload, []string{"vehicle_type", "num", "license_plate", "brand", "model", "driver"})
+	payload := lib.GetMask(r.Payload, []string{"vehicle_type", "vehicle", "category", "num", "license_plate", "brand", "model", "driver"})
 
 	// Start transaction
 	trans := db.OpenTrans(r.Conn)

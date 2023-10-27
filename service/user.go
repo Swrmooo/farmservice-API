@@ -1,12 +1,13 @@
 package service
 
 import (
-	"farmservice/sqlstring"
-	"farmservice/middleware"
 	"farmservice/bu"
+	"farmservice/middleware"
+	"farmservice/sqlstring"
+
+	"github.com/gofiber/fiber/v2"
 	lib "github.com/ttoonn112/ktgolib"
 	"github.com/ttoonn112/ktgolib/db"
-	"github.com/gofiber/fiber/v2"
 )
 
 func User_Login(c *fiber.Ctx) error {
@@ -37,7 +38,7 @@ func User_Profile(c *fiber.Ctx) error {
 	// ดึงข้อมูล User Profile จาก ID
 	profile := bu.User_Detail(id)
 
-	return r.Success(profile)										// ตอบกลับ Success พร้อมค่า profile
+	return r.Success(profile) // ตอบกลับ Success พร้อมค่า profile
 }
 
 func User_UpdateProfile(c *fiber.Ctx) error {
@@ -54,7 +55,7 @@ func User_UpdateProfile(c *fiber.Ctx) error {
 	// ดึงข้อมูล User Profile จาก ID
 	profile := bu.User_Detail(id)
 
-	return r.Success(profile)										// ตอบกลับ Success พร้อมค่า profile
+	return r.Success(profile) // ตอบกลับ Success พร้อมค่า profile
 }
 
 func User_List(c *fiber.Ctx) error {
@@ -68,18 +69,20 @@ func User_List(c *fiber.Ctx) error {
 
 	list := bu.User_List(filter)
 
-	return r.Success(list)										// ตอบกลับ Success พร้อมค่า profile
+	return r.Success(list) // ตอบกลับ Success พร้อมค่า profile
 }
 
 func User_Detail(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "User_Detail")
 
 	id := lib.T(r.Payload, "id")
-	if id == "" { panic("require.Id") }
+	if id == "" {
+		panic("require.Id")
+	}
 
 	detail := bu.User_Detail(id)
 
-	return r.Success(detail)										// ตอบกลับ Success พร้อมค่า profile
+	return r.Success(detail) // ตอบกลับ Success พร้อมค่า profile
 }
 
 func User_Update(c *fiber.Ctx) error {
@@ -88,8 +91,11 @@ func User_Update(c *fiber.Ctx) error {
 	id := lib.T(r.Payload, "id")
 	tel := lib.T(r.Payload, "tel")
 
-	if tel == "" { panic("require.Phone") } else
-	if lib.T(r.Payload, "firstname") == "" || lib.T(r.Payload, "lastname") == "" { panic("require.Name") }
+	if tel == "" {
+		panic("require.Phone")
+	} else if lib.T(r.Payload, "firstname") == "" || lib.T(r.Payload, "lastname") == "" {
+		panic("require.Name")
+	}
 
 	// ดึงค่า field ที่ต้องการมาจาก r.Payload เช่น tel, firstname, lastname
 	payload := lib.GetMask(r.Payload, []string{"tel", "firstname", "lastname"})
@@ -117,14 +123,16 @@ func User_Update(c *fiber.Ctx) error {
 	// ดึงข้อมูล User Profile จาก ID
 	detail := bu.User_Detail(id)
 
-	return r.Success(detail)										// ตอบกลับ Success พร้อมค่า profile
+	return r.Success(detail) // ตอบกลับ Success พร้อมค่า profile
 }
 
 func User_Delete(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "User_Delete")
 
 	id := lib.T(r.Payload, "id")
-	if id == "" { panic("require.Id") }
+	if id == "" {
+		panic("require.Id")
+	}
 
 	db.Execute(r.Conn, sqlstring.User_DeleteFromId(id))
 

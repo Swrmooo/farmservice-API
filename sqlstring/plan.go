@@ -4,6 +4,12 @@ import (
 	lib "github.com/ttoonn112/ktgolib"
 )
 
+func Plan_getPlot() string {
+	sql := " SELECT id, user_id, plot_type, code, area, lat, lng, address, area_type, detail, land_ownership, pics brand FROM plot "
+	sql += " WHERE "
+	return sql
+}
+
 func Plan_get() string {
 	//sql := " SELECT id, code, plan_type, doc_date name, detail FROM Plans "
 	sql := " SELECT id, user_id, plan, num, driver, model, Plan_type, brand FROM plan "

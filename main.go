@@ -66,6 +66,11 @@ func main() {
 	app.Post("/plan/detail", service.Plan_Detail)
 	app.Post("/plan/update", service.Plan_Update)
 	app.Post("/plan/delete", service.Plan_Delete)
+
+	app.Post("/service/list", service.Service_List)
+	app.Post("/service/detail", service.Service_Detail)
+	app.Post("/service/update", service.Service_Update)
+	app.Post("/service/delete", service.Service_Delete)
 	/*
 		app.Post("/friend/list", service.Friend_List)
 		app.Post("/friend/detail", service.Friend_Detail)

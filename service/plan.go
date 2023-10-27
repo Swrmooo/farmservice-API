@@ -14,10 +14,10 @@ func Plan_List(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Plan_List")
 
 	// ค้นหา User จาก member, tel
-	filters := lib.GetMask(r.Payload, []string{"start_date", "end_date", "Plan_type", "user_id"})
+	filters := lib.GetMask(r.Payload, []string{"start_date", "end_date", "plan_type", "plot_type","plan_status", "user_id"})
 	filter := " id <> 0 "
 	filter += lib.AddSqlDateRangeFilter("doc_date", lib.T(filters, "start_date"), lib.T(filters, "end_date"))
-	filter += lib.AddSqlFilter("Plan_type", lib.T(filters, "Plan_type"))
+	filter += lib.AddSqlFilter("plan_type", lib.T(filters, "plan_type"))
 	filter += lib.AddSqlFilter("user_id", lib.T(filters, "user_id"))
 
 	list := bu.Plan_List(filter)
