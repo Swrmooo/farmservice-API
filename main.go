@@ -35,6 +35,7 @@ func main() {
 	app.Use(middleware.HandleErrors)
 
 	app.Post("/user/login", service.User_Login)
+	app.Post("/user/register", service.User_Profile)
 	app.Post("/user/profile", service.User_Profile)             // Get ข้อมูล user ที่ login ปัจจุบัน
 	app.Post("/user/updateprofile", service.User_UpdateProfile) // Update ข้อมูล user ที่ login ปัจจุบัน เช่น ชื่อ, นามสกุล
 	app.Post("/user/list", service.User_List)                   // รายการ User ในระบบ ใช้สำหรับ Admin (บน Web)
@@ -50,7 +51,6 @@ func main() {
 	app.Post("/vehicle/list", service.Vehicle_List)
 	app.Post("/vehicle/detail", service.Vehicle_Detail)
 	app.Post("/vehicle/update", service.Vehicle_Update)
-	app.Post("/vehicle/delete", service.Vehicle_Delete)
 
 	app.Post("/driver/list", service.Driver_List)
 	app.Post("/driver/detail", service.Driver_Detail)

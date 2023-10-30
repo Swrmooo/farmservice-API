@@ -73,8 +73,15 @@ func User_UpdateFromId(id string, data map[string]interface{}) string {
 	return sql
 }
 
+// func User_DeleteFromId(id string) string {
+// 	sql := " DELETE from users "
+// 	sql += " WHERE id = '" + id + "' "
+// 	return sql
+// }
+
 func User_DeleteFromId(id string) string {
-	sql := " DELETE from users "
-	sql += " WHERE id = '" + id + "' "
+	sql := "DELETE FROM users"
+	sql += " WHERE id IN (" + id + ")"
 	return sql
 }
+

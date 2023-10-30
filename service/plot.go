@@ -1,12 +1,15 @@
 package service
 
 import (
-	"farmservice/sqlstring"
-	"farmservice/middleware"
 	"farmservice/bu"
+	"farmservice/middleware"
+	"farmservice/sqlstring"
+	"strconv"
+	"strings"
+
+	"github.com/gofiber/fiber/v2"
 	lib "github.com/ttoonn112/ktgolib"
 	"github.com/ttoonn112/ktgolib/db"
-	"github.com/gofiber/fiber/v2"
 )
 
 func Plot_List(c *fiber.Ctx) error {
@@ -28,7 +31,9 @@ func Plot_Detail(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Plot_Detail")
 
 	id := lib.T(r.Payload, "id")
-	if id == "" { panic("require.Id") }
+	if id == "" {
+		panic("require.Id")
+	}
 
 	detail := bu.Plot_Detail(id)
 
@@ -39,9 +44,11 @@ func Plot_Update(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Plot_Update")
 
 	id := lib.T(r.Payload, "id")
-	if lib.T(r.Payload, "plot_type") == "" { panic("require.Plot.PlotType") }
+	if lib.T(r.Payload, "plot_type") == "" {
+		panic("require.Plot.PlotType")
+	}
 
-	payload := lib.GetMask(r.Payload, []string{"plot_type", "name", "detail"})
+	payload := lib.GetMask(r.Payload, []string{"plot_type", "code", "area", "geo_field", "lat", "lng", "address", "detail", "pics"})
 
 	// Start transaction
 	trans := db.OpenTrans(r.Conn)
@@ -66,18 +73,6 @@ func Plot_Update(c *fiber.Ctx) error {
 	return r.Success(detail)
 }
 
-func Plot_Delete(c *fiber.Ctx) error {
-	r := middleware.GetUserRequestToken(c, "fs", "Plot_Delete")
-
-	id := lib.T(r.Payload, "id")
-	if id == "" { panic("require.Id") }
-
-	db.Execute(r.Conn, sqlstring.Plot_DeleteFromId(id))
-
-	return r.Success(nil)
-}
-
-//Array delete
 // func Plot_Delete(c *fiber.Ctx) error {
 // 	r := middleware.GetUserRequestToken(c, "fs", "Plot_Delete")
 
@@ -88,3 +83,30 @@ func Plot_Delete(c *fiber.Ctx) error {
 
 // 	return r.Success(nil)
 // }
+
+func Plot_Delete(c *fiber.Ctx) error {
+	r := middleware.GetUserRequestToken(c, "fs", "Plot_Delete")
+
+	var request struct {
+		ID []int `json:"id"`
+	}
+
+	if err := c.BodyParser(&request); err != nil {
+		panic("error.InvalidJSONFormat")
+	}
+
+	if len(request.ID) == 0 {
+		panic("require.Id")
+	}
+
+	ids := make([]string, len(request.ID))
+	for i, id := range request.ID {
+		ids[i] = strconv.Itoa(id)
+	}
+	idString := strings.Join(ids, ",")
+
+	sql := sqlstring.Plot_DeleteFromId(idString)
+	db.Execute(r.Conn, sql)
+
+	return r.Success(nil)
+}

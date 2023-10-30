@@ -50,7 +50,7 @@ func Plot_UpdateFromId(id string, data map[string]interface{}) string {
 }
 
 func Plot_DeleteFromId(id string) string {
-	sql := " DELETE from plot "
-	sql += " WHERE id = '" + id + "' "
+	sql := "DELETE FROM plot"
+	sql += " WHERE id IN (" + id + ")"
 	return sql
 }

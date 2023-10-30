@@ -4,6 +4,8 @@ import (
 	"farmservice/bu"
 	"farmservice/middleware"
 	"farmservice/sqlstring"
+	"strconv"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	lib "github.com/ttoonn112/ktgolib"
@@ -74,12 +76,26 @@ func Service_Update(c *fiber.Ctx) error {
 func Service_Delete(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Service_Delete")
 
-	id := lib.T(r.Payload, "id")
-	if id == "" {
+	var request struct {
+		ID []int `json:"id"`
+	}
+
+	if err := c.BodyParser(&request); err != nil {
+		panic("error.InvalidJSONFormat")
+	}
+
+	if len(request.ID) == 0 {
 		panic("require.Id")
 	}
 
-	db.Execute(r.Conn, sqlstring.Service_DeleteFromId(id))
+	ids := make([]string, len(request.ID))
+	for i, id := range request.ID {
+		ids[i] = strconv.Itoa(id)
+	}
+	idString := strings.Join(ids, ",")
+
+	sql := sqlstring.Service_DeleteFromId(idString)
+	db.Execute(r.Conn, sql)
 
 	return r.Success(nil)
 }

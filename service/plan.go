@@ -4,6 +4,8 @@ import (
 	"farmservice/bu"
 	"farmservice/middleware"
 	"farmservice/sqlstring"
+	"strconv"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	lib "github.com/ttoonn112/ktgolib"
@@ -14,7 +16,7 @@ func Plan_List(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Plan_List")
 
 	// ค้นหา User จาก member, tel
-	filters := lib.GetMask(r.Payload, []string{"start_date", "end_date", "plan_type", "plot_type","plan_status", "user_id"})
+	filters := lib.GetMask(r.Payload, []string{"start_date", "end_date", "plan_type", "plot_type", "plan_status", "user_id"})
 	filter := " id <> 0 "
 	filter += lib.AddSqlDateRangeFilter("doc_date", lib.T(filters, "start_date"), lib.T(filters, "end_date"))
 	filter += lib.AddSqlFilter("plan_type", lib.T(filters, "plan_type"))
@@ -74,12 +76,26 @@ func Plan_Update(c *fiber.Ctx) error {
 func Plan_Delete(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Plan_Delete")
 
-	id := lib.T(r.Payload, "id")
-	if id == "" {
+	var request struct {
+		ID []int `json:"id"`
+	}
+
+	if err := c.BodyParser(&request); err != nil {
+		panic("error.InvalidJSONFormat")
+	}
+
+	if len(request.ID) == 0 {
 		panic("require.Id")
 	}
 
-	db.Execute(r.Conn, sqlstring.Plan_DeleteFromId(id))
+	ids := make([]string, len(request.ID))
+	for i, id := range request.ID {
+		ids[i] = strconv.Itoa(id)
+	}
+	idString := strings.Join(ids, ",")
+
+	sql := sqlstring.Plan_DeleteFromId(idString)
+	db.Execute(r.Conn, sql)
 
 	return r.Success(nil)
 }

@@ -51,7 +51,7 @@ func Driver_UpdateFromId(id string, data map[string]interface{}) string {
 }
 
 func Driver_DeleteFromId(id string) string {
-	sql := " DELETE from drivers "
-	sql += " WHERE id = '" + id + "' "
+	sql := "DELETE FROM drivers"
+	sql += " WHERE id IN (" + id + ")"
 	return sql
 }

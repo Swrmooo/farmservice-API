@@ -4,6 +4,8 @@ import (
 	"farmservice/bu"
 	"farmservice/middleware"
 	"farmservice/sqlstring"
+	"strconv"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	lib "github.com/ttoonn112/ktgolib"
@@ -126,15 +128,42 @@ func User_Update(c *fiber.Ctx) error {
 	return r.Success(detail) // ตอบกลับ Success พร้อมค่า profile
 }
 
+// func User_Delete(c *fiber.Ctx) error {
+// 	r := middleware.GetUserRequestToken(c, "fs", "User_Delete")
+
+// 	id := lib.T(r.Payload, "id")
+// 	if id == "" {
+// 		panic("require.Id")
+// 	}
+
+// 	db.Execute(r.Conn, sqlstring.User_DeleteFromId(id))
+
+// 	return r.Success(nil)
+// }
+
 func User_Delete(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "User_Delete")
 
-	id := lib.T(r.Payload, "id")
-	if id == "" {
+	var request struct {
+		ID []int `json:"id"`
+	}
+
+	if err := c.BodyParser(&request); err != nil {
+		panic("error.InvalidJSONFormat")
+	}
+
+	if len(request.ID) == 0 {
 		panic("require.Id")
 	}
 
-	db.Execute(r.Conn, sqlstring.User_DeleteFromId(id))
+	ids := make([]string, len(request.ID))
+	for i, id := range request.ID {
+		ids[i] = strconv.Itoa(id)
+	}
+	idString := strings.Join(ids, ",")
+
+	sql := sqlstring.User_DeleteFromId(idString)
+	db.Execute(r.Conn, sql)
 
 	return r.Success(nil)
 }

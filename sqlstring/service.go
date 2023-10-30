@@ -57,7 +57,7 @@ func Service_UpdateFromId(id string, data map[string]interface{}) string {
 }
 
 func Service_DeleteFromId(id string) string {
-	sql := " DELETE from services "
-	sql += " WHERE id = '" + id + "' "
+	sql := "DELETE FROM services"
+	sql += " WHERE id IN (" + id + ")"
 	return sql
 }

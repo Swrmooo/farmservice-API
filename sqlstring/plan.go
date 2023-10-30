@@ -5,14 +5,13 @@ import (
 )
 
 func Plan_getPlot() string {
-	sql := " SELECT id, user_id, plot_type, code, area, lat, lng, address, area_type, detail, land_ownership, pics brand FROM plot "
+	sql := " SELECT id, user_id, plot_type, code, area, lat, lng, address, area_type, detail, land_ownership, pics owner, name, geo_field FROM plot "
 	sql += " WHERE "
 	return sql
 }
 
 func Plan_get() string {
-	//sql := " SELECT id, code, plan_type, doc_date name, detail FROM Plans "
-	sql := " SELECT id, user_id, plan, num, driver, model, Plan_type, brand FROM plan "
+	sql := " SELECT id, user_id, plan_type, plan, num, driver, model, brand FROM plan "
 	sql += " WHERE "
 	return sql
 }
@@ -63,7 +62,7 @@ func Plan_UpdateFromId(id string, data map[string]interface{}) string {
 }
 
 func Plan_DeleteFromId(id string) string {
-	sql := " DELETE from plan "
-	sql += " WHERE id = '" + id + "' "
+	sql := "DELETE FROM plan"
+	sql += " WHERE id IN (" + id + ")"
 	return sql
 }

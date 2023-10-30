@@ -51,7 +51,7 @@ func Friend_UpdateFromId(id string, data map[string]interface{}) string {
 }
 
 func Friend_DeleteFromId(id string) string {
-	sql := " DELETE from friends "
-	sql += " WHERE id = '" + id + "' "
+	sql := "DELETE FROM friends"
+	sql += " WHERE id IN (" + id + ")"
 	return sql
 }

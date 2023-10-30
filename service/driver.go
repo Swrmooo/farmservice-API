@@ -4,6 +4,8 @@ import (
 	"farmservice/bu"
 	"farmservice/middleware"
 	"farmservice/sqlstring"
+	"strconv"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	lib "github.com/ttoonn112/ktgolib"
@@ -45,9 +47,9 @@ func Driver_Update(c *fiber.Ctx) error {
 	// if lib.T(r.Payload, "tel") == "" {
 	// 	panic("require.PhoneNumber")
 	// } else if lib.T(r.Payload, "firstname") == "" {
-	// 	panic("require.Firstname")	
+	// 	panic("require.Firstname")
 	// } else if lib.T(r.Payload, "lastname") == "" {
-	// 	panic("require.Lastname")	
+	// 	panic("require.Lastname")
 	// }
 
 	payload := lib.GetMask(r.Payload, []string{"num", "firstname", "lastname", "tel", "mood", "pics"})
@@ -78,12 +80,26 @@ func Driver_Update(c *fiber.Ctx) error {
 func Driver_Delete(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Driver_Delete")
 
-	id := lib.T(r.Payload, "id")
-	if id == "" {
+	var request struct {
+		ID []int `json:"id"`
+	}
+
+	if err := c.BodyParser(&request); err != nil {
+		panic("error.InvalidJSONFormat")
+	}
+
+	if len(request.ID) == 0 {
 		panic("require.Id")
 	}
 
-	db.Execute(r.Conn, sqlstring.Driver_DeleteFromId(id))
+	ids := make([]string, len(request.ID))
+	for i, id := range request.ID {
+		ids[i] = strconv.Itoa(id)
+	}
+	idString := strings.Join(ids, ",")
+
+	sql := sqlstring.Driver_DeleteFromId(idString)
+	db.Execute(r.Conn, sql)
 
 	return r.Success(nil)
 }
