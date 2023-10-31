@@ -5,7 +5,7 @@ import (
 )
 
 func plot_get() string {
-	sql := " SELECT id, code, plot_type, doc_date name, detail FROM plot "
+	sql := " SELECT id, user_id, area, geo_field, lat, lng, address, area_type, detail, land_ownership, pics, plot_type, doc_date name, code FROM plot "
 	sql += " WHERE "
 	return sql
 }
@@ -33,13 +33,26 @@ func Plot_Create(code string, userId string) string {
 	return sql
 }
 
+//	func plot_update(data map[string]interface{}) string {
+//		sql := " UPDATE plot set "
+//		for k, _ := range data {
+//			sql += " " + k + " = '" + lib.T(data, k) + "', "
+//		}
+//		sql += " last_updated_time = NOW() "
+//		sql += " WHERE "
+//		return sql
+//	}
 func plot_update(data map[string]interface{}) string {
-	sql := " UPDATE plot set "
-	for k, _ := range data {
-		sql += " " + k + " = '" + lib.T(data, k) + "', "
+	sql := "UPDATE plot SET "
+	for k, v := range data {
+		if k == "geo_field" {
+			sql += k + " = ST_GeomFromText('" + v.(string) + "'), "
+		} else {
+			sql += k + " = '" + lib.T(data, k) + "', "
+		}
 	}
-	sql += " last_updated_time = NOW() "
-	sql += " WHERE "
+	sql += "last_updated_time = NOW() "
+	sql += "WHERE "
 	return sql
 }
 

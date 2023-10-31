@@ -45,6 +45,17 @@ func User_List(filter string) []map[string]interface{} {
 }
 
 func User_Create(trans db.Transaction, tel string) string {
+
+	trans.Execute(sqlstring.User_CreateWithPhone(tel))
+
+	if users := trans.Query(sqlstring.User_GetFromPhone(tel)); len(users) == 1 {
+		return lib.T(users[0], "id")
+	} else {
+		panic("error.ContactAdmin")
+	}
+}
+
+func User_Register(trans db.Transaction, tel string) string {
 	trans.Execute(sqlstring.User_CreateWithPhone(tel))
 	if users := trans.Query(sqlstring.User_GetFromPhone(tel)); len(users) == 1 {
 		return lib.T(users[0], "id")

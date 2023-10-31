@@ -44,13 +44,6 @@ func Driver_Update(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Driver_Update")
 
 	id := lib.T(r.Payload, "id")
-	// if lib.T(r.Payload, "tel") == "" {
-	// 	panic("require.PhoneNumber")
-	// } else if lib.T(r.Payload, "firstname") == "" {
-	// 	panic("require.Firstname")
-	// } else if lib.T(r.Payload, "lastname") == "" {
-	// 	panic("require.Lastname")
-	// }
 
 	payload := lib.GetMask(r.Payload, []string{"num", "firstname", "lastname", "tel", "mood", "pics"})
 

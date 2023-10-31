@@ -1,9 +1,12 @@
 package service
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"farmservice/bu"
 	"farmservice/middleware"
 	"farmservice/sqlstring"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -87,20 +90,90 @@ func User_Detail(c *fiber.Ctx) error {
 	return r.Success(detail) // ตอบกลับ Success พร้อมค่า profile
 }
 
-func User_Update(c *fiber.Ctx) error {
-	r := middleware.GetUserRequestToken(c, "fs", "User_Update")
+func User_Register(c *fiber.Ctx) error {
+	r := middleware.GetAnonymousRequestToken(c, "fs", "User_Register")
 
 	id := lib.T(r.Payload, "id")
+	// firstname := lib.T(r.Payload, "firstname")
+	// lastname := lib.T(r.Payload, "lastname")
 	tel := lib.T(r.Payload, "tel")
+	email := lib.T(r.Payload, "email")
+	password := lib.T(r.Payload, "password")
 
 	if tel == "" {
 		panic("require.Phone")
-	} else if lib.T(r.Payload, "firstname") == "" || lib.T(r.Payload, "lastname") == "" {
+	}
+	if lib.T(r.Payload, "firstname") == "" || lib.T(r.Payload, "lastname") == "" {
 		panic("require.Name")
+	}
+	if email == "" {
+		panic("require.Email")
+	}
+	if password == "" {
+		panic("require.Password")
+	}
+
+	encodedPass := md5.Sum([]byte(password))
+	passMd5 := hex.EncodeToString(encodedPass[:])
+	fmt.Println("function passMd5: ", passMd5)
+	password = passMd5
+	fmt.Println("password : ", password)
+
+	payload := lib.GetMask(r.Payload, []string{"tel", "firstname", "lastname", "email", "username"})
+
+	trans := db.OpenTrans(r.Conn)
+	defer middleware.TryCatch(func(errStr string) {
+		trans.Rollback()
+		trans.Close()
+		panic(errStr)
+	})
+
+	fmt.Println("service tel : ", tel)
+	fmt.Println("service trans : ", trans)
+
+	// กรณีสร้าง User ใหม่ (ถ้าไม่ส่งค่า ID มา)
+	if id == "" {
+		// id = bu.User_Create(trans, tel)
+		id = bu.User_Register(trans, tel)
+	}
+
+	// อัพเดทข้อมูล
+	trans.Execute(sqlstring.User_UpdateFromId(id, payload))
+
+	// End transaction
+	trans.Commit()
+	trans.Close()
+
+	// ดึงข้อมูล User Profile จาก ID
+	detail := bu.User_Detail(id)
+
+	return r.Success(detail) // ตอบกลับ Success พร้อมค่า profile
+}
+
+func User_Update(c *fiber.Ctx) error {
+	r := middleware.GetUserRequestToken(c, "fs", "User_Update")
+	// r := middleware.GetAnonymousRequestToken(c, "fs", "User_Update")
+
+	id := lib.T(r.Payload, "id")
+	tel := lib.T(r.Payload, "tel")
+	email := lib.T(r.Payload, "email")
+	password := lib.T(r.Payload, "password")
+
+	if tel == "" {
+		panic("require.Phone")
+	}
+	if lib.T(r.Payload, "firstname") == "" || lib.T(r.Payload, "lastname") == "" {
+		panic("require.Name")
+	}
+	if email == "" {
+		panic("require.Email")
+	}
+	if password == "" {
+		panic("require.Password")
 	}
 
 	// ดึงค่า field ที่ต้องการมาจาก r.Payload เช่น tel, firstname, lastname
-	payload := lib.GetMask(r.Payload, []string{"tel", "firstname", "lastname"})
+	payload := lib.GetMask(r.Payload, []string{"tel", "firstname", "lastname", "password"})
 
 	// Start transaction
 	trans := db.OpenTrans(r.Conn)
