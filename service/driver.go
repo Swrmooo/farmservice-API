@@ -4,6 +4,7 @@ import (
 	"farmservice/bu"
 	"farmservice/middleware"
 	"farmservice/sqlstring"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -11,6 +12,40 @@ import (
 	lib "github.com/ttoonn112/ktgolib"
 	"github.com/ttoonn112/ktgolib/db"
 )
+
+func Driver_Limit(conn string, userId string, memberType string) error {
+	resultSQL := sqlstring.Driver_Count(userId)
+	count := db.Query(conn, resultSQL)
+
+	if len(count) > 0 {
+		result, ok := count[0]["COUNT(id)"].(int64)
+		fmt.Println("--**--**-- Driver Created :", result+1)
+		if !ok {
+			panic("Invalid count result")
+		}
+
+		switch memberType {
+		case "guest", "standard", "gold":
+			panic("You do not have permission to use this function.")
+		case "premium":
+			if result >= 10 {
+				panic("You've reached the maximum limit of driver.")
+			}
+		case "testmember":
+			if result >= 5 {
+				panic("You've reached the maximum limit of driver.")
+			}
+		case "enterprise":
+			// ไม่จำกัด
+		default:
+			panic("Invalid member type.")
+		}
+	} else {
+		panic("Count result not found")
+	}
+	return nil
+
+}
 
 func Driver_List(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Driver_List")
@@ -54,6 +89,14 @@ func Driver_Update(c *fiber.Ctx) error {
 		trans.Close()
 		panic(errStr)
 	})
+
+	// check COUTN(id) items
+	checkID := lib.T(r.User, "id")
+	checkMember := lib.T(r.User, "member")
+	err := Driver_Limit(r.Conn, checkID, checkMember)
+	if err != nil {
+		panic(err.Error())
+	}
 
 	if id == "" {
 		id = bu.Driver_Create(trans, lib.T(r.User, "id"))

@@ -44,11 +44,11 @@ func Service_Update(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Service_Update")
 
 	id := lib.T(r.Payload, "id")
-	if lib.T(r.Payload, "service_type") == "" {
-		panic("require.Service.ServiceType")
+	if lib.T(r.Payload, "service") == "" {
+		panic("require.Service.Service")
 	}
 
-	payload := lib.GetMask(r.Payload, []string{"service_type", "service", "fee", "detail"})
+	payload := lib.GetMask(r.Payload, []string{"service_type", "service", "fee", "equitment", "title", "unit"})
 
 	// Start transaction
 	trans := db.OpenTrans(r.Conn)
@@ -57,6 +57,8 @@ func Service_Update(c *fiber.Ctx) error {
 		trans.Close()
 		panic(errStr)
 	})
+
+	
 
 	if id == "" {
 		id = bu.Service_Create(trans, lib.T(r.User, "id"))

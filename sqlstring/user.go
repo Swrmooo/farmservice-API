@@ -3,7 +3,6 @@ package sqlstring
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"fmt"
 
 	lib "github.com/ttoonn112/ktgolib"
 )
@@ -27,7 +26,7 @@ func User_UpdateTokenTime(token string) string {
 }
 
 func user_get() string {
-	sql := " SELECT id, username, tel, firstname, lastname, password FROM users "
+	sql := " SELECT id, username, tel, firstname, lastname, password, member FROM users "
 	sql += " WHERE "
 	return sql
 }
@@ -57,13 +56,14 @@ func User_GetFromFilter(filter string) string {
 }
 
 func User_CreateWithPhone(tel string) string {
+	member := "standard"
 	encodedPass := md5.Sum([]byte(tel))
 	passMd5 := hex.EncodeToString(encodedPass[:])
-	fmt.Println("-------tem : ", tel)
-	fmt.Println("-------passMd5 : ", passMd5)
+	// fmt.Println("-------role : ", member)
+	// fmt.Println("-------passMd5 : ", passMd5)
 
 	// sql := " insert into users (tel, username, password) values ('"+tel+"', '"+tel+"', '"+lib.GenerateRandomString(10)+"'); "
-	sql := " insert into users (tel, username, password) values ('" + tel + "', '" + tel + "', '" + passMd5 + "'); "
+	sql := " insert into users (tel, username, password, member) values ('" + tel + "', '" + tel + "', '" + passMd5 + "', '" + member + "'); "
 	return sql
 }
 

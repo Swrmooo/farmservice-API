@@ -67,3 +67,8 @@ func Plot_DeleteFromId(id string) string {
 	sql += " WHERE id IN (" + id + ")"
 	return sql
 }
+
+func Plot_Count(userId string) string {
+	sql := "SELECT COUNT(id) FROM plot WHERE user_id = '" + userId + "'"
+	return sql
+}

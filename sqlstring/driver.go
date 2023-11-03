@@ -55,3 +55,8 @@ func Driver_DeleteFromId(id string) string {
 	sql += " WHERE id IN (" + id + ")"
 	return sql
 }
+
+func Driver_Count(userId string) string {
+	sql := "SELECT COUNT(id) FROM drivers WHERE user_id = '" + userId + "'"
+	return sql
+}

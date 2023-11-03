@@ -12,8 +12,47 @@ import (
 	"github.com/ttoonn112/ktgolib/db"
 )
 
+// func CheckVehicleLimit(conn string, userId string, memberType string) error {
+// 	resultSQL := sqlstring.Vehicle_Count(userId)
+// 	count := db.Query(conn, resultSQL)
+// 	if len(count) > 0 {
+// 		result, ok := count[0]["COUNT(id)"].(int64)
+// 		if !ok {
+// 			panic("Invalid count result")
+// 		}
+
+// 		switch memberType {
+// 		case "guest", "standard":
+// 			if result >= 20 {
+// 				panic("You've reached the maximum limit of vehicles.")
+// 			}
+// 		case "gold":
+// 			if result >= 100 {
+// 				panic("You've reached the maximum limit of vehicles.")
+// 			}
+// 		case "premium":
+// 			if result >= 200 {
+// 				panic("You've reached the maximum limit of vehicles.")
+// 			}
+// 		case "testmember":
+// 			if result >= 5 {
+// 				panic("You've reached the maximum limit of vehicles.")
+// 			}
+// 		case "enterprise":
+// 			// ไม่จำกัด
+// 		default:
+// 			panic("Invalid member type.")
+// 		}
+// 	} else {
+// 		panic("Count result not found")
+// 	}
+// 	return nil
+
+// }
+
 func Vehicle_List(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Vehicle_List")
+	// userRole := db.GetUserRoleFromDatabase(r.User.ID)
 
 	// ค้นหา User จาก member, tel
 	filters := lib.GetMask(r.Payload, []string{"start_date", "end_date", "vehicle_type", "vehicle", "user_id"})
@@ -59,6 +98,14 @@ func Vehicle_Update(c *fiber.Ctx) error {
 		panic(errStr)
 	})
 
+	// // check COUTN(id) items
+	// checkID := lib.T(r.User, "id")
+	// checkMember := lib.T(r.User, "member")
+	// err := CheckVehicleLimit(r.Conn, checkID, checkMember)
+	// if err != nil {
+	// 	panic(err.Error())
+	// }
+
 	if id == "" {
 		id = bu.Vehicle_Create(trans, lib.T(r.User, "id"))
 	}
@@ -73,21 +120,6 @@ func Vehicle_Update(c *fiber.Ctx) error {
 
 	return r.Success(detail)
 }
-
-// func Vehicle_Delete(c *fiber.Ctx) error {
-// 	r := middleware.GetUserRequestToken(c, "fs", "Vehicle_Delete")
-
-// 	id := lib.T(r.Payload, "id")
-// 	if id == "" {
-// 		panic("require.Id")
-// 	}
-
-// 	fmt.Println("id", id)
-
-// 	db.Execute(r.Conn, sqlstring.Vehicle_DeleteFromId(id))
-
-// 	return r.Success(nil)
-// }
 
 func Vehicle_Delete(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Vehicle_Delete")

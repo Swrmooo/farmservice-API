@@ -119,7 +119,7 @@ func User_Register(c *fiber.Ctx) error {
 	password = passMd5
 	fmt.Println("password : ", password)
 
-	payload := lib.GetMask(r.Payload, []string{"tel", "firstname", "lastname", "email", "username"})
+	payload := lib.GetMask(r.Payload, []string{"tel", "firstname", "lastname", "email", "username", "member"})
 
 	trans := db.OpenTrans(r.Conn)
 	defer middleware.TryCatch(func(errStr string) {

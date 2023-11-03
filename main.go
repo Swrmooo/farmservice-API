@@ -31,8 +31,11 @@ func main() {
 		AllowMethods: "GET, POST, PUT, DELETE",
 	}))
 
+	
+
 	app.Use(middleware.JSONOnly)
 	app.Use(middleware.HandleErrors)
+	// app.Use(middleware.UserAccess("guest"))
 
 	app.Post("/user/login", service.User_Login)
 	app.Post("/user/register", service.User_Register)

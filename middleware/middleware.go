@@ -3,6 +3,7 @@ package middleware
 import (
 	"farmservice/lang"
 	"farmservice/sqlstring"
+	"fmt"
 	"strings"
 	"time"
 
@@ -103,6 +104,7 @@ func GetRequestToken(c *fiber.Ctx, conn string, operation string, allowAnonymous
 	// Get user from token
 	var user map[string]interface{}
 	token := c.Get("Authorization")
+
 	if lib.FirstXChar(token, 7) == "Bearer " {
 		token = strings.Replace(token, "Bearer ", "", 1)
 	}
@@ -110,8 +112,12 @@ func GetRequestToken(c *fiber.Ctx, conn string, operation string, allowAnonymous
 		if users := db.Query(conn, sqlstring.User_GetFromToken(token)); len(users) == 1 {
 			user = users[0]
 			db.Query(conn, sqlstring.User_UpdateTokenTime(token))
+
+			fmt.Println("users", users)
+
 		}
 	}
+
 	if allowAnonymous == false && user == nil {
 		panic("error.TokenNotFound")
 	}
@@ -123,13 +129,29 @@ func GetRequestToken(c *fiber.Ctx, conn string, operation string, allowAnonymous
 	}
 
 	if user != nil {
+		// userRole, _ := user["member"].(string)
+		// user["UserRole"] = userRole
 		log.Log(operation, lib.T(user, "username"), "", lib.MapToString(payload), "Operation")
+		// fmt.Println("+++++user", user)
 	} else {
 		log.Log(operation, "", "", lib.MapToString(payload), "Operation")
 	}
 
 	return &RequestToken{Ctx: c, Conn: conn, Time: t, Operation: operation, User: user, Payload: payload}
 }
+
+// func UserAccess(role string) {
+// 	// fmt.Println("--UserAccess:", role)
+
+// 	switch role {
+// 	case "guest":
+// 		fmt.Println("--UserAccess:", role)
+// 	case "standard":
+// 		fmt.Println("--UserAccess:", role)
+// 	}
+
+// 	// return nil
+// }
 
 // info = ข้อมูลที่ส่งกลับ Client
 func (r *RequestToken) Success(info interface{}) error {

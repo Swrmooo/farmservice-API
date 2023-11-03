@@ -6,7 +6,7 @@ import (
 
 func Service_get() string {
 	//sql := " SELECT id, code, service_type, doc_date name, detail FROM services "
-	sql := " SELECT id, user_id, service_type, service, fee, detail FROM services "
+	sql := " SELECT id, user_id, service_type, service, fee, unit, title, equitment FROM services "
 	sql += " WHERE "
 	return sql
 }
@@ -59,5 +59,10 @@ func Service_UpdateFromId(id string, data map[string]interface{}) string {
 func Service_DeleteFromId(id string) string {
 	sql := "DELETE FROM services"
 	sql += " WHERE id IN (" + id + ")"
+	return sql
+}
+
+func Service_Count(userId string) string {
+	sql := "SELECT COUNT(id) FROM services WHERE user_id = '" + userId + "'"
 	return sql
 }

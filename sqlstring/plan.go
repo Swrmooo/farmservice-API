@@ -66,3 +66,8 @@ func Plan_DeleteFromId(id string) string {
 	sql += " WHERE id IN (" + id + ")"
 	return sql
 }
+
+func Plan_Count(userId string) string {
+	sql := "SELECT COUNT(id) FROM plan WHERE user_id = '" + userId + "'"
+	return sql
+}
