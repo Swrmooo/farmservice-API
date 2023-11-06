@@ -6,7 +6,7 @@ import (
 
 func Vehicle_get() string {
 	//sql := " SELECT id, code, vehicle_type, doc_date name, detail FROM vehicles "
-	sql := " SELECT id, user_id, license_plate, vehicle, num, driver, model, vehicle_type, brand FROM vehicles "
+	sql := " SELECT id, user_id, install, num, license_plate, brand, model, vehicle_type, driver, vehicle, catagory FROM vehicles "
 	sql += " WHERE "
 	return sql
 }
@@ -36,7 +36,7 @@ func Vehicle_GetFromFilter(filter string) string {
 }
 
 func Vehicle_Create(code string, userId string) string {
-	sql := " insert into vehicles (code, doc_date, user_id) values ('" + code + "', '" + lib.NowDate() + "', '" + userId + "'); "
+	sql := " insert into vehicles (code, doc_date, user_id, install) values ('" + code + "', '" + lib.NowDate() + "', '" + userId + "', '" + "0" + "'); "
 	return sql
 }
 

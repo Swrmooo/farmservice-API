@@ -1,17 +1,23 @@
 package sqlstring
 
 import (
+	"fmt"
+
 	lib "github.com/ttoonn112/ktgolib"
 )
 
-func Plan_getPlot() string {
-	sql := " SELECT id, user_id, plot_type, code, area, lat, lng, address, area_type, detail, land_ownership, pics owner, name, geo_field FROM plot "
-	sql += " WHERE "
+func Plan_Join() string {
+	sql := "SELECT p.id, p.user_id, p.vehicle_id, p.driver_id, p.plan_type, p.plan, p.code, p.status, d.firstname, d.lastname, v.num "
+	sql += "FROM plan p "
+	sql += "JOIN drivers d ON p.driver_id = d.id "
+	sql += "JOIN vehicles v ON p.vehicle_id = v.id "
+	sql += "WHERE "
 	return sql
 }
 
 func Plan_get() string {
-	sql := " SELECT id, user_id, plan_type, plan, num, driver, model, brand FROM plan "
+	sql := " SELECT id, user_id, vehicle_id, driver_id, plan_type, plan, code, status "
+	sql += " FROM plan "
 	sql += " WHERE "
 	return sql
 }
@@ -30,13 +36,25 @@ func Plan_GetFromId(id string) string {
 
 func Plan_GetFromCode(code string) string {
 	sql := Plan_get()
+	// sql := Plan_Join(code)
 	sql += " code = '" + code + "' "
+	return sql
+}
+
+func Plan_GetFromFilterToJoin(filter string) string {
+	sql := Plan_Join()
+	sql += filter
+	fmt.Println("/-/-/-/-/-/-/-/-/-/-/test", filter)
+	fmt.Println("/-/-/-/-/-/-/-/-/-/-/test", sql)
 	return sql
 }
 
 func Plan_GetFromFilter(filter string) string {
 	sql := Plan_get()
+	// sql := Plan_Join(filter)
 	sql += filter
+	fmt.Println("/-/-/-/-/-/-/-/-/-/-/test", filter)
+	fmt.Println("/-/-/-/-/-/-/-/-/-/-/test", sql)
 	return sql
 }
 

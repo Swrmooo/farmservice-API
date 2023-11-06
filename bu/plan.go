@@ -5,6 +5,13 @@ import (
 	"github.com/ttoonn112/ktgolib/db"
 	"farmservice/sqlstring"
 )
+func Plan_Join(filter string) []map[string]interface{} {
+	list := db.Query("fs", sqlstring.Plan_GetFromFilterToJoin(filter))
+	//for k,v := range list {
+	//	do something
+	//}
+	return list
+}
 
 func Plan_List(filter string) []map[string]interface{} {
 	list := db.Query("fs", sqlstring.Plan_GetFromFilter(filter))
