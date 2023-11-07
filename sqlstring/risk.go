@@ -1,11 +1,13 @@
 package sqlstring
 
 import (
+	"fmt"
+
 	lib "github.com/ttoonn112/ktgolib"
 )
 
 func Risk_get() string {
-	sql := " SELECT id, user_id, plot_id, icon_type, risk_type, lat, lng, radius, field, code, doc_date, last_updated_time FROM plot_risk "
+	sql := " SELECT id, user_id, plot_id, risk_type, lat, lng, radius, geo_field, code, doc_date, last_updated_time FROM plot_risk "
 	sql += " WHERE "
 	return sql
 }
@@ -34,12 +36,54 @@ func Risk_Create(code string, userId string) string {
 }
 
 func Risk_update(data map[string]interface{}) string {
+	// fmt.Println("-//*-/*-/-//*-- data */-*/*-/*-/-*-/*", data)
 	sql := "UPDATE plot_risk SET "
 	for k, v := range data {
-		if k == "field" {
-			sql += k + " = ST_GeomFromText('" + v.(string) + "'), "
-		} else {
-			sql += k + " = '" + lib.T(data, k) + "', "
+		// fmt.Println("==========k===========", k)
+		// fmt.Println("==========v===========", v)
+		if k == "risk_type" {
+			switch v {
+			case "ตอไม้":
+				fmt.Println("==========[ ตอไม้ ]==========")
+				sql += k + " = '" + lib.T(data, k) + "', "
+				sql += "lat = " + lib.T(data, "lat") + ", "
+				sql += "lng = " + lib.T(data, "lng") + ", "
+				sql += "radius = " + lib.T(data, "radius") + ", "
+				sql += "plot_id = " + lib.T(data, "plot_id") + ", "
+				fmt.Println("==========[]==========")
+			case "ถนน":
+				fmt.Println("==========[ ถนน ]==========")
+				sql += k + " = '" + lib.T(data, k) + "', "
+				sql += "lat = " + lib.T(data, "lat") + ", "
+				sql += "lng = " + lib.T(data, "lng") + ", "
+				sql += "geo_field" + " = ST_GeomFromText('MULTILINESTRING(" + lib.T(data, "geo_field") + ")'), "
+				sql += "plot_id = " + lib.T(data, "plot_id") + ", "
+				fmt.Println("==========[]==========")
+			case "สิ่งปลูกสร้าง":
+				fmt.Println("==========[ สิ่งปลูกสร้าง ]==========")
+				sql += k + " = '" + lib.T(data, k) + "', "
+				sql += "lat = " + lib.T(data, "lat") + ", "
+				sql += "lng = " + lib.T(data, "lng") + ", "
+				sql += "geo_field" + " = ST_GeomFromText('POLYGON(" + lib.T(data, "geo_field") + ")'), "
+				sql += "plot_id = " + lib.T(data, "plot_id") + ", "
+				fmt.Println("==========[]==========")
+			case "บ่อน้ำ":
+				fmt.Println("==========[ บ่อน้ำ ]==========")
+				sql += k + " = '" + lib.T(data, k) + "', "
+				sql += "lat = " + lib.T(data, "lat") + ", "
+				sql += "lng = " + lib.T(data, "lng") + ", "
+				sql += "geo_field" + " = ST_GeomFromText('POLYGON(" + lib.T(data, "geo_field") + ")'), "
+				sql += "plot_id = " + lib.T(data, "plot_id") + ", "
+				fmt.Println("==========[]==========")
+			case "หิน":
+				fmt.Println("==========[ หิน ]==========")
+				sql += k + " = '" + lib.T(data, k) + "', "
+				sql += "lat = " + lib.T(data, "lat") + ", "
+				sql += "lng = " + lib.T(data, "lng") + ", "
+				sql += "geo_field" + " = ST_GeomFromText('POLYGON(" + lib.T(data, "geo_field") + ")'), "
+				sql += "plot_id = " + lib.T(data, "plot_id") + ", "
+				fmt.Println("==========[]==========")
+			}
 		}
 	}
 	sql += "last_updated_time = NOW() "
