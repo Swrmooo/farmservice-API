@@ -31,8 +31,6 @@ func main() {
 		AllowMethods: "GET, POST, PUT, DELETE",
 	}))
 
-	
-
 	app.Use(middleware.JSONOnly)
 	app.Use(middleware.HandleErrors)
 	// app.Use(middleware.UserAccess("guest"))
@@ -50,6 +48,11 @@ func main() {
 	app.Post("/plot/detail", service.Plot_Detail)
 	app.Post("/plot/update", service.Plot_Update)
 	app.Post("/plot/delete", service.Plot_Delete)
+
+	app.Post("/risk/list", service.Risk_List)
+	app.Post("/risk/detail", service.Risk_Detail)
+	app.Post("/risk/update", service.Risk_Update)
+	app.Post("/risk/delete", service.Risk_Delete)
 
 	app.Post("/vehicle/list", service.Vehicle_List)
 	app.Post("/vehicle/detail", service.Vehicle_Detail)

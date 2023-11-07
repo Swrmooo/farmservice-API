@@ -42,7 +42,9 @@ func Plot_Create(code string, userId string) string {
 //		sql += " WHERE "
 //		return sql
 //	}
+
 func plot_update(data map[string]interface{}) string {
+	// fmt.Println("-*-*-*--*/-*/-*/*/-*/* plot update")
 	sql := "UPDATE plot SET "
 	for k, v := range data {
 		if k == "geo_field" {
