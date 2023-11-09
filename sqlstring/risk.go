@@ -7,7 +7,7 @@ import (
 )
 
 func Risk_get() string {
-	sql := " SELECT id, user_id, plot_id, risk_type, lat, lng, radius, geo_field, code, doc_date, last_updated_time FROM plot_risk "
+	sql := " SELECT id, user_id, plot_id, risk_type, lat, lng, radius, geo_field, doc_date, last_updated_time FROM plot_risk "
 	sql += " WHERE "
 	return sql
 }
@@ -30,17 +30,19 @@ func Risk_GetFromFilter(filter string) string {
 	return sql
 }
 
+// func Risk_Create(userId string) string {
+// 	sql := " insert into plot_risk (doc_date, user_id) values ('" + lib.NowDate() + "', '" + userId + "'); "
+// 	return sql
+// }
+
 func Risk_Create(code string, userId string) string {
 	sql := " insert into plot_risk (code, doc_date, user_id) values ('" + code + "', '" + lib.NowDate() + "', '" + userId + "'); "
 	return sql
 }
 
 func Risk_update(data map[string]interface{}) string {
-	// fmt.Println("-//*-/*-/-//*-- data */-*/*-/*-/-*-/*", data)
 	sql := "UPDATE plot_risk SET "
 	for k, v := range data {
-		// fmt.Println("==========k===========", k)
-		// fmt.Println("==========v===========", v)
 		if k == "risk_type" {
 			switch v {
 			case "ตอไม้":
@@ -50,7 +52,6 @@ func Risk_update(data map[string]interface{}) string {
 				sql += "lng = " + lib.T(data, "lng") + ", "
 				sql += "radius = " + lib.T(data, "radius") + ", "
 				sql += "plot_id = " + lib.T(data, "plot_id") + ", "
-				fmt.Println("==========[]==========")
 			case "ถนน":
 				fmt.Println("==========[ ถนน ]==========")
 				sql += k + " = '" + lib.T(data, k) + "', "
@@ -66,7 +67,6 @@ func Risk_update(data map[string]interface{}) string {
 				sql += "lng = " + lib.T(data, "lng") + ", "
 				sql += "geo_field" + " = ST_GeomFromText('POLYGON(" + lib.T(data, "geo_field") + ")'), "
 				sql += "plot_id = " + lib.T(data, "plot_id") + ", "
-				fmt.Println("==========[]==========")
 			case "บ่อน้ำ":
 				fmt.Println("==========[ บ่อน้ำ ]==========")
 				sql += k + " = '" + lib.T(data, k) + "', "
@@ -74,7 +74,6 @@ func Risk_update(data map[string]interface{}) string {
 				sql += "lng = " + lib.T(data, "lng") + ", "
 				sql += "geo_field" + " = ST_GeomFromText('POLYGON(" + lib.T(data, "geo_field") + ")'), "
 				sql += "plot_id = " + lib.T(data, "plot_id") + ", "
-				fmt.Println("==========[]==========")
 			case "หิน":
 				fmt.Println("==========[ หิน ]==========")
 				sql += k + " = '" + lib.T(data, k) + "', "
@@ -82,7 +81,6 @@ func Risk_update(data map[string]interface{}) string {
 				sql += "lng = " + lib.T(data, "lng") + ", "
 				sql += "geo_field" + " = ST_GeomFromText('POLYGON(" + lib.T(data, "geo_field") + ")'), "
 				sql += "plot_id = " + lib.T(data, "plot_id") + ", "
-				fmt.Println("==========[]==========")
 			}
 		}
 	}

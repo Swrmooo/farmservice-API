@@ -5,7 +5,7 @@ import (
 )
 
 func plot_get() string {
-	sql := " SELECT id, user_id, area, geo_field, lat, lng, address, area_type, detail, land_ownership, pics, plot_type, doc_date name, code FROM plot "
+	sql := " SELECT id, user_id, area, geo_field, lat, lng, address, area_type, detail, land_ownership, pics, plot_type, doc_date, code FROM plot "
 	sql += " WHERE "
 	return sql
 }

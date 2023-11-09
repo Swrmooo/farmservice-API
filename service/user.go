@@ -128,8 +128,8 @@ func User_Register(c *fiber.Ctx) error {
 		panic(errStr)
 	})
 
-	fmt.Println("service tel : ", tel)
-	fmt.Println("service trans : ", trans)
+	// fmt.Println("service tel : ", tel)
+	// fmt.Println("service trans : ", trans)
 
 	// กรณีสร้าง User ใหม่ (ถ้าไม่ส่งค่า ID มา)
 	if id == "" {

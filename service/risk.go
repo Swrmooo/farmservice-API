@@ -50,7 +50,7 @@ func Risk_List(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Risk_List")
 
 	// ค้นหา User จาก member, tel
-	filters := lib.GetMask(r.Payload, []string{"risk_type", "user_id", "lat", "lng", "radius", "code"})
+	filters := lib.GetMask(r.Payload, []string{"risk_type", "user_id", "lat", "lng", "radius"})
 	filter := " id <> 0 "
 	filter += lib.AddSqlDateRangeFilter("doc_date", lib.T(filters, "start_date"), lib.T(filters, "end_date"))
 	filter += lib.AddSqlFilter("risk_type", lib.T(filters, "risk_type"))
@@ -105,10 +105,6 @@ func Risk_Update(c *fiber.Ctx) error {
 	if err != nil {
 		panic(err.Error())
 	}
-
-	// filter data before create
-	// test := lib.T(r.User, "id")
-
 
 	if id == "" {
 		id = bu.Risk_Create(trans, lib.T(r.User, "id"))

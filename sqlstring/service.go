@@ -5,8 +5,7 @@ import (
 )
 
 func Service_get() string {
-	//sql := " SELECT id, code, service_type, doc_date name, detail FROM services "
-	sql := " SELECT id, user_id, service_type, service, fee, unit, title, equitment FROM services "
+	sql := " SELECT id, user_id, title, service_type, service, fee, unit, equitment, code, doc_date, last_updated_time FROM services "
 	sql += " WHERE "
 	return sql
 }

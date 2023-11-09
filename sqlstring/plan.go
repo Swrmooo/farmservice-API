@@ -1,8 +1,6 @@
 package sqlstring
 
 import (
-	"fmt"
-
 	lib "github.com/ttoonn112/ktgolib"
 )
 
@@ -16,7 +14,7 @@ func Plan_Join() string {
 }
 
 func Plan_get() string {
-	sql := " SELECT id, user_id, vehicle_id, driver_id, plan_type, plan, code, status "
+	sql := " SELECT id, start_date, end_date, user_id, vehicle_id, driver_id, plan, plan_type, status, code, doc_date, last_updated_time "
 	sql += " FROM plan "
 	sql += " WHERE "
 	return sql
@@ -44,8 +42,7 @@ func Plan_GetFromCode(code string) string {
 func Plan_GetFromFilterToJoin(filter string) string {
 	sql := Plan_Join()
 	sql += filter
-	fmt.Println("/-/-/-/-/-/-/-/-/-/-/test", filter)
-	fmt.Println("/-/-/-/-/-/-/-/-/-/-/test", sql)
+	//sql += lib.AddSqlFilter()
 	return sql
 }
 
@@ -53,8 +50,6 @@ func Plan_GetFromFilter(filter string) string {
 	sql := Plan_get()
 	// sql := Plan_Join(filter)
 	sql += filter
-	fmt.Println("/-/-/-/-/-/-/-/-/-/-/test", filter)
-	fmt.Println("/-/-/-/-/-/-/-/-/-/-/test", sql)
 	return sql
 }
 
