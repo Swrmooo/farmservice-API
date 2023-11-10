@@ -2,6 +2,7 @@ package bu
 
 import (
 	"farmservice/sqlstring"
+	"farmservice/util"
 
 	lib "github.com/ttoonn112/ktgolib"
 	"github.com/ttoonn112/ktgolib/db"
@@ -16,7 +17,7 @@ func Plot_GenCode() string {
 	sql += " ) A "
 	if list := db.Query("fs", sql); len(list) == 1 {
 		if lib.SI64(list[0], "num") > 0 {
-			code = "PT" + lib.ZeroString(lib.SI64(list[0], "last_code")+1, 6)
+			code = "PT" + util.ZeroString(lib.SI64(list[0], "last_code")+1, 6)
 		}
 	} else {
 		panic("error.ContactAdmin")
@@ -33,8 +34,8 @@ func Plot_List(filter string) []map[string]interface{} {
 }
 
 func Plot_Create(trans db.Transaction, userId string) string {
-	// code := lib.GenerateRandomString(10)
 	code := Plot_GenCode()
+	// code := ZeroString("PT000001", 6)
 	trans.Execute(sqlstring.Plot_Create(code, userId))
 	if list := trans.Query(sqlstring.Plot_GetFromCode(code)); len(list) == 1 {
 		return lib.T(list[0], "id")

@@ -1,14 +1,11 @@
 package sqlstring
 
 import (
-	"fmt"
-
 	lib "github.com/ttoonn112/ktgolib"
 )
 
 func Driver_get() string {
-	//sql := " SELECT id, code, driver_type, doc_date name, detail FROM drivers "
-	sql := " SELECT id, user_id, firstname, lastname, tel, mood, pics FROM drivers "
+	sql := " SELECT id, user_id, firstname, lastname, tel, mood, pics, code FROM drivers "
 	sql += " WHERE "
 	return sql
 }
@@ -28,8 +25,6 @@ func Driver_GetFromCode(code string) string {
 func Driver_GetFromFilter(filter string) string {
 	sql := Driver_get()
 	sql += filter
-	fmt.Println("/-/-/-/-/-/-/-/-/-/-/test", filter)
-	fmt.Println("/-/-/-/-/-/-/-/-/-/-/test", sql)
 	return sql
 }
 

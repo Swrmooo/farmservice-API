@@ -7,7 +7,7 @@ import (
 )
 
 func Risk_get() string {
-	sql := " SELECT id, user_id, plot_id, risk_type, lat, lng, radius, geo_field, doc_date, last_updated_time FROM plot_risk "
+	sql := " SELECT id, user_id, plot_id, risk_type, lat, lng, radius, geo_field, code, doc_date, last_updated_time FROM plot_risk "
 	sql += " WHERE "
 	return sql
 }
@@ -30,12 +30,7 @@ func Risk_GetFromFilter(filter string) string {
 	return sql
 }
 
-// func Risk_Create(userId string) string {
-// 	sql := " insert into plot_risk (doc_date, user_id) values ('" + lib.NowDate() + "', '" + userId + "'); "
-// 	return sql
-// }
-
-func Risk_Create(code string, userId string) string {
+func Risk_Create(code, userId string) string {
 	sql := " insert into plot_risk (code, doc_date, user_id) values ('" + code + "', '" + lib.NowDate() + "', '" + userId + "'); "
 	return sql
 }

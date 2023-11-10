@@ -5,8 +5,7 @@ import (
 )
 
 func Friend_get() string {
-	//sql := " SELECT id, code, friend_type, doc_date name, detail FROM Friends "
-	sql := " SELECT id, user_id, firstname, lastname, tel, mood, pics FROM friends "
+	sql := " SELECT id, user_id, friend_user_id, firstname, lastname, tel, mood, pics, code FROM friends "
 	sql += " WHERE "
 	return sql
 }
@@ -29,8 +28,8 @@ func Friend_GetFromFilter(filter string) string {
 	return sql
 }
 
-func Friend_Create(code string, userId string) string {
-	sql := " insert into friends (code, doc_date, user_id) values ('" + code + "', '" + lib.NowDate() + "', '" + userId + "'); "
+func Friend_Create(code string, userId string, friendId string) string {
+	sql := " insert into friends (code, doc_date, user_id, friend_user_id) values ('" + code + "', '" + lib.NowDate() + "', '" + userId + "', '" + friendId + "'); "
 	return sql
 }
 

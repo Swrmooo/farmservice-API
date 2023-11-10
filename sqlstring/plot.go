@@ -33,22 +33,12 @@ func Plot_Create(code string, userId string) string {
 	return sql
 }
 
-//	func plot_update(data map[string]interface{}) string {
-//		sql := " UPDATE plot set "
-//		for k, _ := range data {
-//			sql += " " + k + " = '" + lib.T(data, k) + "', "
-//		}
-//		sql += " last_updated_time = NOW() "
-//		sql += " WHERE "
-//		return sql
-//	}
-
+// ('POLYGON(" + v.(string) + ")')
 func plot_update(data map[string]interface{}) string {
-	// fmt.Println("-*-*-*--*/-*/-*/*/-*/* plot update")
 	sql := "UPDATE plot SET "
 	for k, v := range data {
 		if k == "geo_field" {
-			sql += k + " = ST_GeomFromText('" + v.(string) + "'), "
+			sql += k + " = ST_GeomFromText('POLYGON(" + v.(string) + ")'), "
 		} else {
 			sql += k + " = '" + lib.T(data, k) + "', "
 		}

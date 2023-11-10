@@ -2,6 +2,7 @@ package bu
 
 import (
 	"farmservice/sqlstring"
+	"farmservice/util"
 
 	lib "github.com/ttoonn112/ktgolib"
 	"github.com/ttoonn112/ktgolib/db"
@@ -15,7 +16,7 @@ func Service_GenCode() string {
 	sql += " ) A "
 	if list := db.Query("fs", sql); len(list) == 1 {
 		if lib.SI64(list[0], "num") > 0 {
-			code = "SV" + lib.ZeroString(lib.SI64(list[0], "last_code")+1, 6)
+			code = "SV" + util.ZeroString(lib.SI64(list[0], "last_code")+1, 6)
 		}
 	} else {
 		panic("error.ContactAdmin")

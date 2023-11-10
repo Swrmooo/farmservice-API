@@ -4,7 +4,6 @@ import (
 	"farmservice/bu"
 	"farmservice/middleware"
 	"farmservice/sqlstring"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -19,7 +18,6 @@ func Driver_Limit(conn string, userId string, memberType string) error {
 
 	if len(count) > 0 {
 		result, ok := count[0]["COUNT(id)"].(int64)
-		fmt.Println("--**--**-- Driver Created :", result+1)
 		if !ok {
 			panic("Invalid count result")
 		}
