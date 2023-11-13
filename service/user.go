@@ -133,8 +133,7 @@ func User_Register(c *fiber.Ctx) error {
 
 	// กรณีสร้าง User ใหม่ (ถ้าไม่ส่งค่า ID มา)
 	if id == "" {
-		// id = bu.User_Create(trans, tel)
-		id = bu.User_Register(trans, tel)
+		id = bu.User_Register(trans, tel, password)
 	}
 
 	// อัพเดทข้อมูล
@@ -185,7 +184,7 @@ func User_Update(c *fiber.Ctx) error {
 
 	// กรณีสร้าง User ใหม่ (ถ้าไม่ส่งค่า ID มา)
 	if id == "" {
-		id = bu.User_Create(trans, tel)
+		id = bu.User_Create(trans, tel, password)
 	}
 
 	// อัพเดทข้อมูล
@@ -201,18 +200,6 @@ func User_Update(c *fiber.Ctx) error {
 	return r.Success(detail) // ตอบกลับ Success พร้อมค่า profile
 }
 
-// func User_Delete(c *fiber.Ctx) error {
-// 	r := middleware.GetUserRequestToken(c, "fs", "User_Delete")
-
-// 	id := lib.T(r.Payload, "id")
-// 	if id == "" {
-// 		panic("require.Id")
-// 	}
-
-// 	db.Execute(r.Conn, sqlstring.User_DeleteFromId(id))
-
-// 	return r.Success(nil)
-// }
 
 func User_Delete(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "User_Delete")

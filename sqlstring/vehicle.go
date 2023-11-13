@@ -5,7 +5,6 @@ import (
 )
 
 func Vehicle_get() string {
-	//sql := " SELECT id, code, vehicle_type, doc_date name, detail FROM vehicles "
 	sql := " SELECT id, user_id, install, num, license_plate, brand, model, vehicle_type, driver, vehicle, catagory, code FROM vehicles "
 	sql += " WHERE "
 	return sql

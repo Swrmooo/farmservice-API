@@ -44,9 +44,9 @@ func User_List(filter string) []map[string]interface{} {
 	return list
 }
 
-func User_Create(trans db.Transaction, tel string) string {
+func User_Create(trans db.Transaction, tel string, pass string) string {
 
-	trans.Execute(sqlstring.User_CreateWithPhone(tel))
+	trans.Execute(sqlstring.User_CreateWithPhone(tel, pass))
 	if users := trans.Query(sqlstring.User_GetFromPhone(tel)); len(users) == 1 {
 		return lib.T(users[0], "id")
 	} else {
@@ -54,8 +54,8 @@ func User_Create(trans db.Transaction, tel string) string {
 	}
 }
 
-func User_Register(trans db.Transaction, tel string) string {
-	trans.Execute(sqlstring.User_CreateWithPhone(tel))
+func User_Register(trans db.Transaction, tel string, pass string) string {
+	trans.Execute(sqlstring.User_CreateWithPhone(tel, pass))
 	if users := trans.Query(sqlstring.User_GetFromPhone(tel)); len(users) == 1 {
 		return lib.T(users[0], "id")
 	} else {

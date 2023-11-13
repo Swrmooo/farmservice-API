@@ -3,6 +3,7 @@ package bu
 import (
 	"farmservice/sqlstring"
 	"farmservice/util"
+	"fmt"
 
 	lib "github.com/ttoonn112/ktgolib"
 	"github.com/ttoonn112/ktgolib/db"
@@ -19,6 +20,7 @@ func Vehicle_GenCode() string {
 			code = "BR" + util.ZeroString(lib.SI64(list[0], "last_code")+1, 6)
 		}
 	} else {
+		fmt.Println("ererereerererrrororor gencode")
 		panic("error.ContactAdmin")
 	}
 	return code

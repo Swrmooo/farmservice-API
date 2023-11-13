@@ -50,11 +50,12 @@ func Plot_List(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Plot_List")
 
 	// ค้นหา User จาก member, tel
-	filters := lib.GetMask(r.Payload, []string{"start_date", "end_date", "plot_type", "user_id"})
+	filters := lib.GetMask(r.Payload, []string{"name", "start_date", "end_date", "plot_type", "user_id"})
 	filter := " id <> 0 "
 	filter += lib.AddSqlDateRangeFilter("doc_date", lib.T(filters, "start_date"), lib.T(filters, "end_date"))
 	filter += lib.AddSqlFilter("plot_type", lib.T(filters, "plot_type"))
 	filter += lib.AddSqlFilter("user_id", lib.T(filters, "user_id"))
+	filter += lib.AddSqlFilter("name", lib.T(filters, "name"))
 
 	list := bu.Plot_List(filter)
 
@@ -82,7 +83,7 @@ func Plot_Update(c *fiber.Ctx) error {
 		panic("require.Plot.PlotType")
 	}
 
-	payload := lib.GetMask(r.Payload, []string{"plot_type", "code", "area", "geo_field", "lat", "lng", "address", "detail", "pics"})
+	payload := lib.GetMask(r.Payload, []string{"user_id", "name", "num", "plot_type", "code", "area", "geo_field", "lat", "lng", "address", "area_type", "detail", "land_ownership", "pics"})
 
 	// Start transaction
 	trans := db.OpenTrans(r.Conn)

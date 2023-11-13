@@ -12,44 +12,6 @@ import (
 	"github.com/ttoonn112/ktgolib/db"
 )
 
-// func CheckVehicleLimit(conn string, userId string, memberType string) error {
-// 	resultSQL := sqlstring.Vehicle_Count(userId)
-// 	count := db.Query(conn, resultSQL)
-// 	if len(count) > 0 {
-// 		result, ok := count[0]["COUNT(id)"].(int64)
-// 		if !ok {
-// 			panic("Invalid count result")
-// 		}
-
-// 		switch memberType {
-// 		case "guest", "standard":
-// 			if result >= 20 {
-// 				panic("You've reached the maximum limit of vehicles.")
-// 			}
-// 		case "gold":
-// 			if result >= 100 {
-// 				panic("You've reached the maximum limit of vehicles.")
-// 			}
-// 		case "premium":
-// 			if result >= 200 {
-// 				panic("You've reached the maximum limit of vehicles.")
-// 			}
-// 		case "testmember":
-// 			if result >= 5 {
-// 				panic("You've reached the maximum limit of vehicles.")
-// 			}
-// 		case "enterprise":
-// 			// ไม่จำกัด
-// 		default:
-// 			panic("Invalid member type.")
-// 		}
-// 	} else {
-// 		panic("Count result not found")
-// 	}
-// 	return nil
-
-// }
-
 func Vehicle_List(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Vehicle_List")
 	// userRole := db.GetUserRoleFromDatabase(r.User.ID)
