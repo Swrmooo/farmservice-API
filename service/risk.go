@@ -37,7 +37,7 @@ func Risk_Limit(conn string, userId string, memberType string) error {
 		case "premium", "enterprise":
 			// ไม่จำกัด
 		default:
-			panic("Invalid member type.")
+			panic("Please register as a member before using Application")
 		}
 	} else {
 		panic("Count result not found")

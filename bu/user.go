@@ -10,12 +10,12 @@ import (
 	"github.com/ttoonn112/ktgolib/db"
 )
 
-func User_Login(username string, pass string) map[string]interface{} {
+func User_Login(tel string, pass string) map[string]interface{} {
 	encodedPass := md5.Sum([]byte(pass))
 	passMd5 := hex.EncodeToString(encodedPass[:])
 	fmt.Println("Encoded Password: ", passMd5)
 
-	if result := db.Query("fs", sqlstring.User_CheckLogin(username, passMd5)); len(result) == 1 {
+	if result := db.Query("fs", sqlstring.User_CheckLogin(tel, passMd5)); len(result) == 1 {
 		id := lib.T(result[0], "id")
 		token := lib.T(result[0], "username") + "-" + lib.GenerateRandomString(60) //Generate token
 		db.Execute("fs", sqlstring.User_UpdateTokenFromId(id, token))

@@ -18,16 +18,23 @@ import (
 func User_Login(c *fiber.Ctx) error {
 	r := middleware.GetAnonymousRequestToken(c, "fs", "User_Login")
 
-	username := lib.T(r.Payload, "username")
+	// username := lib.T(r.Payload, "username")
+	tel := lib.T(r.Payload, "tel")
 	pass := lib.T(r.Payload, "password")
 
-	if username == "" {
-		panic("require.Username")
-	} else if pass == "" {
+	// if username == "" {
+	// 	panic("require.Username")
+	// } 
+
+	if tel == "" {
+		panic("require.Telephone")
+	} 
+	
+	if pass == "" {
 		panic("require.Password")
 	}
 
-	if user := bu.User_Login(username, pass); user != nil {
+	if user := bu.User_Login(tel, pass); user != nil {
 		return r.Success(user)
 	} else {
 		panic("error.IncorrectLogin")

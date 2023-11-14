@@ -14,7 +14,7 @@ func Plan_Join() string {
 }
 
 func Plan_get() string {
-	sql := " SELECT id, start_date, end_date, user_id, vehicle_id, driver_id, plan, plan_type, status, code, doc_date, last_updated_time "
+	sql := " SELECT id, start_date, end_date, user_id, vehicle_id, driver_id, job, plan, plan_type, status, code, doc_date, last_updated_time "
 	sql += " FROM plan "
 	sql += " WHERE "
 	return sql

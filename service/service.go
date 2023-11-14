@@ -58,8 +58,6 @@ func Service_Update(c *fiber.Ctx) error {
 		panic(errStr)
 	})
 
-	
-
 	if id == "" {
 		id = bu.Service_Create(trans, lib.T(r.User, "id"))
 	}

@@ -16,15 +16,12 @@ func Plan_Join(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Plan_List")
 
 	// ค้นหา User จาก member, tel
-	filters := lib.GetMask(r.Payload, []string{"start_date", "end_date", "plan_type", "status", "plan", "user_id", "plot_id", "vehicle_id", "driver_id"})
+	filters := lib.GetMask(r.Payload, []string{"start_date", "end_date", "plan_type", "status", "plan", "user_id", "plot_id", "vehicle_id", "driver_id", "job"})
 	filter := " p.id <> 0 "
 	filter += lib.AddSqlDateRangeFilter("doc_date", lib.T(filters, "start_date"), lib.T(filters, "end_date"))
-	filter += lib.AddSqlFilter("plan_type", lib.T(filters, "plan_type"))
+	filter += lib.AddSqlFilter("p.plan_type", lib.T(filters, "plan_type"))
 	filter += lib.AddSqlFilter("p.user_id", lib.T(filters, "user_id"))
-	// filter += lib.AddSqlFilter("status", lib.T(filters, "status"))
-	// filter += lib.AddSqlFilter("plot_id", lib.T(filters, "plot_id"))
-	// filter += lib.AddSqlFilter("vehicle_id", lib.T(filters, "vehicle_id"))
-	// filter += lib.AddSqlFilter("driver_id", lib.T(filters, "driver_id"))
+	filter += lib.AddSqlFilter("p.job", lib.T(filters, "job"))
 
 	list := bu.Plan_Join(filter)
 
@@ -35,7 +32,7 @@ func Plan_List(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Plan_List")
 
 	// ค้นหา User จาก member, tel
-	filters := lib.GetMask(r.Payload, []string{"start_date", "end_date", "plan_type", "status", "plan", "user_id", "plot_id", "vehicle_id", "driver_id"})
+	filters := lib.GetMask(r.Payload, []string{"start_date", "end_date", "plan_type", "status", "plan", "user_id", "plot_id", "vehicle_id", "driver_id", "job"})
 	filter := " id <> 0 "
 	filter += lib.AddSqlDateRangeFilter("doc_date", lib.T(filters, "start_date"), lib.T(filters, "end_date"))
 	filter += lib.AddSqlFilter("plan_type", lib.T(filters, "plan_type"))
