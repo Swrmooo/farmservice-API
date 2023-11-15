@@ -4,25 +4,12 @@ import (
 	"farmservice/sqlstring"
 	"farmservice/util"
 
-	// code "farmservice/util"
-
 	lib "github.com/ttoonn112/ktgolib"
 	"github.com/ttoonn112/ktgolib/db"
 )
 
 func Risk_GenCode() string {
-	code := "BR000001"
-	filter := " left(code,2) = 'BR' and length(code) = 8 "
-	sql := " select right(max(code),6) as last_code, count(code) as num from ( "
-	sql += sqlstring.Risk_GetFromFilter(filter)
-	sql += " ) A "
-	if list := db.Query("fs", sql); len(list) == 1 {
-		if lib.SI64(list[0], "num") > 0 {
-			code = "BR" + util.ZeroString(lib.SI64(list[0], "last_code")+1, 6)
-		}
-	} else {
-		panic("error.ContactAdmin")
-	}
+	code := util.GenCode("BR", "risk")
 	return code
 }
 

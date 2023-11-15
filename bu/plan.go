@@ -9,18 +9,7 @@ import (
 )
 
 func Plan_GenCode() string {
-	code := "JOB000001"
-	filter := " left(code,3) = 'JOB' and length(code) = 9 "
-	sql := " select right(max(code),6) as last_code, count(code) as num from ( "
-	sql += sqlstring.Plan_GetFromFilter(filter)
-	sql += " ) A "
-	if list := db.Query("fs", sql); len(list) == 1 {
-		if lib.SI64(list[0], "num") > 0 {
-			code = "JOB" + util.ZeroString(lib.SI64(list[0], "last_code")+1, 6)
-		}
-	} else {
-		panic("error.ContactAdmin")
-	}
+	code := util.GenCode("JOB", "")
 	return code
 }
 

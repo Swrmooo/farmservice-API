@@ -31,7 +31,7 @@ func Risk_Limit(conn string, userId string, memberType string) error {
 				panic("You've reached the maximum limit of risk area.")
 			}
 		case "testmember":
-			if result >= 5 {
+			if result >= 3 {
 				panic("You've reached the maximum limit of risk area.")
 			}
 		case "premium", "enterprise":

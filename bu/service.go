@@ -9,18 +9,7 @@ import (
 )
 
 func Service_GenCode() string {
-	code := "SV000001"
-	filter := " left(code,2) = 'SV' and length(code) = 8 "
-	sql := " select right(max(code),6) as last_code, count(code) as num from ( "
-	sql += sqlstring.Service_GetFromFilter(filter)
-	sql += " ) A "
-	if list := db.Query("fs", sql); len(list) == 1 {
-		if lib.SI64(list[0], "num") > 0 {
-			code = "SV" + util.ZeroString(lib.SI64(list[0], "last_code")+1, 6)
-		}
-	} else {
-		panic("error.ContactAdmin")
-	}
+	code := util.GenCode("SV", "")
 	return code
 }
 

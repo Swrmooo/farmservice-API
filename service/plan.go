@@ -13,7 +13,7 @@ import (
 )
 
 func Plan_Join(c *fiber.Ctx) error {
-	r := middleware.GetUserRequestToken(c, "fs", "Plan_List")
+	r := middleware.GetUserRequestToken(c, "fs", "Plan_Join")
 
 	// ค้นหา User จาก member, tel
 	filters := lib.GetMask(r.Payload, []string{"start_date", "end_date", "plan_type", "status", "plan", "user_id", "plot_id", "vehicle_id", "driver_id", "job"})

@@ -31,7 +31,7 @@ func Plot_Limit(conn string, userId string, memberType string) error {
 				panic("You've reached the maximum limit of plot.")
 			}
 		case "testmember":
-			if result >= 5 {
+			if result >= 3 {
 				panic("You've reached the maximum limit of plot.")
 			}
 		case "enterprise":
