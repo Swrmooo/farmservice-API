@@ -9,24 +9,8 @@ import (
 	"github.com/ttoonn112/ktgolib/db"
 )
 
-func TestVehicle_GenCode() string {
-	code := util.GenCode("BR", "vehicle")
-	return code
-}
-
 func Vehicle_GenCode() string {
-	code := "BR000001"
-	filter := " left(code,2) = 'BR' and length(code) = 8 "
-	sql := " select right(max(code),6) as last_code, count(code) as num from ( "
-	sql += sqlstring.Vehicle_GetFromFilter(filter)
-	sql += " ) A "
-	if list := db.Query("fs", sql); len(list) == 1 {
-		if lib.SI64(list[0], "num") > 0 {
-			code = "BR" + util.ZeroString(lib.SI64(list[0], "last_code")+1, 6)
-		}
-	} else {
-		panic("error.ContactAdmin")
-	}
+	code := util.GenCode("BR", "vehicle")
 	return code
 }
 
@@ -39,9 +23,7 @@ func Vehicle_List(filter string) []map[string]interface{} {
 }
 
 func Vehicle_Create(trans db.Transaction, userId string) string {
-	// code := Vehicle_GenCode()
-	code := TestVehicle_GenCode()
-	fmt.Println("code vehicle=====", code)
+	code := Vehicle_GenCode()
 	trans.Execute(sqlstring.Vehicle_Create(code, userId))
 	if list := trans.Query(sqlstring.Vehicle_GetFromCode(code)); len(list) == 1 {
 		return lib.T(list[0], "id")
