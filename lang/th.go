@@ -13,6 +13,7 @@ var TH map[string]string = map[string]string{
   "require.Name" : "กรุณาระบุชื่อ-นามสกุล",
   "require.Username" : "กรุณาระบุชื่อผู้ใช้งานหรือเบอร์โทร",
   "require.Phone" : "กรุณาระบุเบอร์โทร",
+  "require.PhoneNotValid" : "กรุณาระบุเบอร์โทร 10 หลักให้ถูกต้อง",
   "require.Password" : "กรุณาระบุรหัสผ่าน",
 
   "require.Plot.PlotType": "กรุณาระบุประเภทแปลง",

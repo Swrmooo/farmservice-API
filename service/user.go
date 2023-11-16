@@ -6,10 +6,10 @@ import (
 	"farmservice/bu"
 	"farmservice/middleware"
 	"farmservice/sqlstring"
+	"farmservice/util"
 	"fmt"
 	"strconv"
 	"strings"
-
 	"github.com/gofiber/fiber/v2"
 	lib "github.com/ttoonn112/ktgolib"
 	"github.com/ttoonn112/ktgolib/db"
@@ -24,12 +24,12 @@ func User_Login(c *fiber.Ctx) error {
 
 	// if username == "" {
 	// 	panic("require.Username")
-	// } 
+	// }
 
 	if tel == "" {
 		panic("require.Telephone")
-	} 
-	
+	}
+
 	if pass == "" {
 		panic("require.Password")
 	}
@@ -104,18 +104,20 @@ func User_Register(c *fiber.Ctx) error {
 	// firstname := lib.T(r.Payload, "firstname")
 	// lastname := lib.T(r.Payload, "lastname")
 	tel := lib.T(r.Payload, "tel")
-	email := lib.T(r.Payload, "email")
+	//email := lib.T(r.Payload, "email")
 	password := lib.T(r.Payload, "password")
 
 	if tel == "" {
 		panic("require.Phone")
+	}else if len(tel) != 10 {
+		panic("require.PhoneNotValid")
 	}
 	if lib.T(r.Payload, "firstname") == "" || lib.T(r.Payload, "lastname") == "" {
 		panic("require.Name")
 	}
-	if email == "" {
-		panic("require.Email")
-	}
+	//if email == "" {
+	//	panic("require.Email")
+	//}
 	if password == "" {
 		panic("require.Password")
 	}
@@ -141,6 +143,7 @@ func User_Register(c *fiber.Ctx) error {
 	// กรณีสร้าง User ใหม่ (ถ้าไม่ส่งค่า ID มา)
 	if id == "" {
 		id = bu.User_Register(trans, tel, password)
+		util.SendOTP(tel)
 	}
 
 	// อัพเดทข้อมูล

@@ -3,7 +3,6 @@ package bu
 import (
 	"farmservice/sqlstring"
 	"farmservice/util"
-	"fmt"
 
 	lib "github.com/ttoonn112/ktgolib"
 	"github.com/ttoonn112/ktgolib/db"

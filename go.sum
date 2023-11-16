@@ -25,6 +25,14 @@ github.com/rogpeppe/go-internal v1.9.0 h1:73kH8U+JUqXU8lRuOHeVHaa/SZPifC7BkcraZV
 github.com/rogpeppe/go-internal v1.9.0/go.mod h1:WtVeX8xhTBvf0smdhujwtBcq4Qrzq/fJaraNFVN+nFs=
 github.com/ttoonn112/ktgolib v0.0.0-20231024180844-7b66f9d64b54 h1:F0p6irrmdEuW9NNVNEzbdT2+EJKPsWNC/kI7c3G+U9I=
 github.com/ttoonn112/ktgolib v0.0.0-20231024180844-7b66f9d64b54/go.mod h1:hVUC49/e3d+LEXdX7O+lLXrya9dufyWkUTP8YqJMJYs=
+github.com/ttoonn112/ktgolib v0.1.3-0.20231116070749-3bb6c83802b8 h1:6kQu5jj0N6MMlWxWJklxUUM0IyY3UvVIbYFRxs+Ej5o=
+github.com/ttoonn112/ktgolib v0.1.3-0.20231116070749-3bb6c83802b8/go.mod h1:hVUC49/e3d+LEXdX7O+lLXrya9dufyWkUTP8YqJMJYs=
+github.com/ttoonn112/ktgolib v0.1.3-0.20231116074313-180a2c91fd0e h1:QAU9uQ4TTYohEw+I5uQuYO9kZGA7HMDpeRFZT6huKCs=
+github.com/ttoonn112/ktgolib v0.1.3-0.20231116074313-180a2c91fd0e/go.mod h1:hVUC49/e3d+LEXdX7O+lLXrya9dufyWkUTP8YqJMJYs=
+github.com/ttoonn112/ktgolib v0.1.3-0.20231116075126-de9b1d2581bf h1:byHCCGmrQNGPAdYWh9QMhkiGSbNL497QiNYpugMPlKM=
+github.com/ttoonn112/ktgolib v0.1.3-0.20231116075126-de9b1d2581bf/go.mod h1:hVUC49/e3d+LEXdX7O+lLXrya9dufyWkUTP8YqJMJYs=
+github.com/ttoonn112/ktgolib v0.1.3-0.20231116082101-fb7f3b6d1984 h1:jVPvCUL8HvPm9QWO6AqumltNBuE1P3gp26n6uDguIaw=
+github.com/ttoonn112/ktgolib v0.1.3-0.20231116082101-fb7f3b6d1984/go.mod h1:hVUC49/e3d+LEXdX7O+lLXrya9dufyWkUTP8YqJMJYs=
 github.com/valyala/bytebufferpool v1.0.0 h1:GqA5TC/0021Y/b9FG4Oi9Mr3q7XYx6KllzawFIhcdPw=
 github.com/valyala/bytebufferpool v1.0.0/go.mod h1:6bBcMArwyJ5K/AmCkWv1jt77kVWyCJ6HpOuEn7z0Csc=
 github.com/valyala/fasthttp v1.49.0 h1:9FdvCpmxB74LH4dPb7IJ1cOSsluR07XG3I1txXWwJpE=
