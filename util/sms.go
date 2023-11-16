@@ -7,20 +7,26 @@ import (
 
 var sms_provider_api_key string = "0d75690cfee73f7b3523c9b25d07e859"
 var sms_provider_secret_key string = "XjLNNY0hLBLICd4d"
-var project_key string = "FarmService"
+var project_key string = "4d9028cd56"		// FarmService
 
-func SendOTP(phone string) {
+func SendOTP(phone string) (otp_token string) {
   msg, ok := sms.SendOTP_MKT(sms_provider_api_key, sms_provider_secret_key, project_key, phone);
-  log.LogHidden("SendOTP", "", phone, msg, "OTP")
+  log.Log("SendOTP", "", phone, msg, "OTP")
   if !ok {
-    log.LogHidden("SendOTP", "", phone, msg, "OTPFailed")
-  }
+    log.Log("SendOTP", "", phone, msg, "OTPFailed")
+		return ""
+  }else{
+		return msg
+	}
 }
 
-func ValidateOTP(phone string, token string, otp string) {
+func ValidateOTP(phone string, token string, otp string) bool {
   msg, ok := sms.ValidateOTP_MKT(sms_provider_api_key, sms_provider_secret_key, token, otp);
-  log.LogHidden("ValidateOTP", "", phone, "("+token+","+otp+") : "+msg, "OTP")
+  log.Log("ValidateOTP", "", phone, "("+token+","+otp+") : "+msg, "OTP")
   if !ok {
-    log.LogHidden("ValidateOTP", "", phone, "("+token+","+otp+") : "+msg, "OTPFailed")
-  }
+    log.Log("ValidateOTP", "", phone, "("+token+","+otp+") : "+msg, "OTPFailed")
+		return false
+  }else{
+		return true
+	}
 }

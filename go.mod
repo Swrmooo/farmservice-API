@@ -15,7 +15,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/rogpeppe/go-internal v1.9.0 // indirect
-	github.com/ttoonn112/ktgolib v0.1.3-0.20231116082101-fb7f3b6d1984 // indirect
+	github.com/ttoonn112/ktgolib v0.1.3-0.20231116103508-bbcfc67aa415 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.49.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect

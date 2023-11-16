@@ -128,7 +128,7 @@ func User_Register(c *fiber.Ctx) error {
 	password = passMd5
 	fmt.Println("password : ", password)
 
-	payload := lib.GetMask(r.Payload, []string{"tel", "firstname", "lastname", "email", "username", "member"})
+	payload := lib.GetMask(r.Payload, []string{"tel", "firstname", "lastname", "username", "member"})
 
 	trans := db.OpenTrans(r.Conn)
 	defer middleware.TryCatch(func(errStr string) {
@@ -143,7 +143,13 @@ func User_Register(c *fiber.Ctx) error {
 	// กรณีสร้าง User ใหม่ (ถ้าไม่ส่งค่า ID มา)
 	if id == "" {
 		id = bu.User_Register(trans, tel, password)
-		util.SendOTP(tel)
+		if otp_token := util.SendOTP(tel); otp_token != "" {
+			trans.Execute(sqlstring.User_UpdateFromId(id, map[string]interface{}{
+					"otp_token": otp_token,
+			}))
+		}else{
+			panic("error.user.OTPSendFailed")
+		}
 	}
 
 	// อัพเดทข้อมูล

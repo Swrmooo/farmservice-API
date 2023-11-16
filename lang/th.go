@@ -6,8 +6,12 @@ var TH map[string]string = map[string]string{
   "error.TokenNotFound" : "User token not found",
   "error.IncorrectLogin" : "Username หรือ Password ไม่ถูกต้อง",
   "error.OperationFailed" : "Operation Failed !!!",
+  "error.DBOperationFailed" : "Database operation failed !!!",
   "error.JsonFailed" : "Json Failed !!!",
   "error.ContactAdmin" : "ไม่สามารถดำเนินการได้ กรุณาติดต่อผู้ดูแลระบบ",
+
+  "error.user.PhoneExists": "เบอร์โทรนี้มีผู้ใช้ลงทะเบียนแล้ว ไม่สามารถลงทะเบียนซ้ำได้",
+  "error.user.OTPSendFailed": "ไม่สามารถส่ง OTP ได้ในขณะนี้ กรุณาลองอีกครั้งหรือติดต่อฝ่าย Support ลูกค้า",
 
   "require.Id" : "ไม่พบข้อมูล ID",
   "require.Name" : "กรุณาระบุชื่อ-นามสกุล",
