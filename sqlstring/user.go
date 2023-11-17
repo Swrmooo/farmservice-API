@@ -34,8 +34,14 @@ func User_UpdateTokenTime(token string) string {
 }
 
 func user_get() string {
-	sql := " SELECT id, username, tel, firstname, lastname, password, member FROM users "
+	sql := " SELECT id, username, tel, firstname, lastname, member FROM users "
 	sql += " WHERE "
+	return sql
+}
+
+func User_GetAccessTokenFromPhone(tel string) string {
+	sql := " SELECT id, username, tel, token, otp_token FROM users "
+	sql += " WHERE tel = '" + tel + "' "
 	return sql
 }
 

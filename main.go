@@ -43,6 +43,7 @@ func main() {
 	app.Post("/user/detail", service.User_Detail)               // Get ข้อมูล user จาก Id (ใช้ร่วมกับ /user/list)
 	app.Post("/user/update", service.User_Update)               // Update ข้อมูล user จาก Id (ใช้ร่วมกับ /user/list)
 	app.Post("/user/delete", service.User_Delete)               // Delete ข้อมูล user จาก Id (ใช้ร่วมกับ /user/list)
+	app.Post("/user/otpcheck", service.User_OTPCheck)
 
 	app.Post("/plot/list", service.Plot_List)
 	app.Post("/plot/detail", service.Plot_Detail)

@@ -6,10 +6,10 @@ import (
 	"farmservice/bu"
 	"farmservice/middleware"
 	"farmservice/sqlstring"
+	"farmservice/util"
 	"fmt"
 	"strconv"
 	"strings"
-
 	"github.com/gofiber/fiber/v2"
 	lib "github.com/ttoonn112/ktgolib"
 	"github.com/ttoonn112/ktgolib/db"
@@ -24,12 +24,12 @@ func User_Login(c *fiber.Ctx) error {
 
 	// if username == "" {
 	// 	panic("require.Username")
-	// } 
+	// }
 
 	if tel == "" {
 		panic("require.Telephone")
-	} 
-	
+	}
+
 	if pass == "" {
 		panic("require.Password")
 	}
@@ -104,18 +104,20 @@ func User_Register(c *fiber.Ctx) error {
 	// firstname := lib.T(r.Payload, "firstname")
 	// lastname := lib.T(r.Payload, "lastname")
 	tel := lib.T(r.Payload, "tel")
-	email := lib.T(r.Payload, "email")
+	//email := lib.T(r.Payload, "email")
 	password := lib.T(r.Payload, "password")
 
 	if tel == "" {
 		panic("require.Phone")
+	}else if len(tel) != 10 {
+		panic("require.PhoneNotValid")
 	}
 	if lib.T(r.Payload, "firstname") == "" || lib.T(r.Payload, "lastname") == "" {
 		panic("require.Name")
 	}
-	if email == "" {
-		panic("require.Email")
-	}
+	//if email == "" {
+	//	panic("require.Email")
+	//}
 	if password == "" {
 		panic("require.Password")
 	}
@@ -126,7 +128,7 @@ func User_Register(c *fiber.Ctx) error {
 	password = passMd5
 	fmt.Println("password : ", password)
 
-	payload := lib.GetMask(r.Payload, []string{"tel", "firstname", "lastname", "email", "username", "member"})
+	payload := lib.GetMask(r.Payload, []string{"tel", "firstname", "lastname", "username", "member"})
 
 	trans := db.OpenTrans(r.Conn)
 	defer middleware.TryCatch(func(errStr string) {
@@ -141,6 +143,13 @@ func User_Register(c *fiber.Ctx) error {
 	// กรณีสร้าง User ใหม่ (ถ้าไม่ส่งค่า ID มา)
 	if id == "" {
 		id = bu.User_Register(trans, tel, password)
+		if otp_token := util.SendOTP(tel); otp_token != "" {
+			trans.Execute(sqlstring.User_UpdateFromId(id, map[string]interface{}{
+					"otp_token": otp_token,
+			}))
+		}else{
+			panic("error.user.OTPSendFailed")
+		}
 	}
 
 	// อัพเดทข้อมูล
@@ -231,6 +240,29 @@ func User_Delete(c *fiber.Ctx) error {
 
 	sql := sqlstring.User_DeleteFromId(idString)
 	db.Execute(r.Conn, sql)
+
+	return r.Success(nil)
+}
+
+func User_OTPCheck(c *fiber.Ctx) error {
+	r := middleware.GetAnonymousRequestToken(c, "fs", "User_OTPCheck")
+
+	tel := lib.T(r.Payload, "tel")
+	otp := lib.T(r.Payload, "otp")
+
+	if tel == "" { panic("require.Phone") }else
+	if otp == "" { panic("require.OTP") }
+
+	details := db.Query(r.Conn, sqlstring.User_GetAccessTokenFromPhone(tel))
+	uac := details[0]
+
+	if isValid := util.ValidateOTP(tel, lib.T(uac, "otp_token"), otp); !isValid {
+		panic("error.user.InvalidOTP")
+	}
+
+	db.Execute(r.Conn, sqlstring.User_UpdateFromId(lib.T(uac, "id"), map[string]interface{}{
+			"otp_token": "Validated on "+lib.Now(),
+	}))
 
 	return r.Success(nil)
 }
