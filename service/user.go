@@ -272,3 +272,35 @@ func User_OTPCheck(c *fiber.Ctx) error {
 
 	return r.Success(nil)
 }
+
+func User_Payment(c *fiber.Ctx) error {
+	r := middleware.GetUserRequestToken(c, "fs", "User_Payment")
+
+	id := lib.T(r.Payload, "id")
+	member := lib.T(r.User, "member")
+
+	if id == "" {
+		panic("require.Id")
+	}
+	if member == "" {
+		panic("require.Member")
+	}
+	
+	result := sqlstring.User_Exists("id", id)
+	checkId := db.Query(r.Conn, result)
+	idExist := lib.SI64(checkId[0], "COUNT(id)")
+	switch idExist {
+	case 1:
+		fmt.Printf("Successfully applied for %s level.", member)
+	default:
+		panic("User Not Exist")
+	}
+
+	payload := lib.GetMask(r.Payload, []string{"id", "member"})
+
+	db.Execute(r.Conn, sqlstring.User_UpdateFromId(id, payload))
+
+	profile := bu.User_Detail(id)
+
+	return r.Success(profile)
+}

@@ -4,16 +4,8 @@ import (
 	// "crypto/md5"
 	// "encoding/hex"
 
-	"fmt"
-
 	lib "github.com/ttoonn112/ktgolib"
 )
-
-// func User_CheckLogin(username string, pass string) string {
-// 	sql := " SELECT id, username FROM users "
-// 	sql += " WHERE (username = '" + username + "' OR tel = '" + username + "') AND password = '" + pass + "' "
-// 	return sql
-// }
 
 func User_CheckLogin(tel string, pass string) string {
 	sql := " SELECT id, username FROM users "
@@ -34,7 +26,7 @@ func User_UpdateTokenTime(token string) string {
 }
 
 func user_get() string {
-	sql := " SELECT id, username, tel, firstname, lastname, member FROM users "
+	sql := " SELECT id, nickname, tel, firstname, lastname, member FROM users "
 	sql += " WHERE "
 	return sql
 }
@@ -70,14 +62,7 @@ func User_GetFromFilter(filter string) string {
 }
 
 func User_CreateWithPhone(tel string, pass string) string {
-	fmt.Println("--sqlstring-----tel====== : ", tel)
-	fmt.Println("--sqlstring-----pass====== : ", pass)
 	member := "standard"
-	// encodedPass := md5.Sum([]byte(tel))
-	// passMd5 := hex.EncodeToString(encodedPass[:])
-	// fmt.Println("-------role : ", member)
-	// fmt.Println("-------passMd5 : ", passMd5)
-
 	sql := " insert into users (tel, username, password, member) values ('" + tel + "', '" + tel + "', '" + pass + "', '" + member + "'); "
 	return sql
 }
@@ -101,5 +86,10 @@ func User_UpdateFromId(id string, data map[string]interface{}) string {
 func User_DeleteFromId(id string) string {
 	sql := "DELETE FROM users"
 	sql += " WHERE id IN (" + id + ")"
+	return sql
+}
+
+func User_Exists(where string, what string) string {
+	sql := "SELECT COUNT(id) FROM users WHERE " + where + " = " + what + " "
 	return sql
 }
