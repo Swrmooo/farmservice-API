@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
 	"github.com/gofiber/fiber/v2"
 	lib "github.com/ttoonn112/ktgolib"
 	"github.com/ttoonn112/ktgolib/db"
@@ -109,7 +110,7 @@ func User_Register(c *fiber.Ctx) error {
 
 	if tel == "" {
 		panic("require.Phone")
-	}else if len(tel) != 10 {
+	} else if len(tel) != 10 {
 		panic("require.PhoneNotValid")
 	}
 	if lib.T(r.Payload, "firstname") == "" || lib.T(r.Payload, "lastname") == "" {
@@ -145,9 +146,9 @@ func User_Register(c *fiber.Ctx) error {
 		id = bu.User_Register(trans, tel, password)
 		if otp_token := util.SendOTP(tel); otp_token != "" {
 			trans.Execute(sqlstring.User_UpdateFromId(id, map[string]interface{}{
-					"otp_token": otp_token,
+				"otp_token": otp_token,
 			}))
-		}else{
+		} else {
 			panic("error.user.OTPSendFailed")
 		}
 	}
@@ -211,11 +212,11 @@ func User_Update(c *fiber.Ctx) error {
 	trans.Close()
 
 	// ดึงข้อมูล User Profile จาก ID
+	// ดึงข้อมูล User Profile จาก ID
 	detail := bu.User_Detail(id)
 
 	return r.Success(detail) // ตอบกลับ Success พร้อมค่า profile
 }
-
 
 func User_Delete(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "User_Delete")
@@ -250,8 +251,11 @@ func User_OTPCheck(c *fiber.Ctx) error {
 	tel := lib.T(r.Payload, "tel")
 	otp := lib.T(r.Payload, "otp")
 
-	if tel == "" { panic("require.Phone") }else
-	if otp == "" { panic("require.OTP") }
+	if tel == "" {
+		panic("require.Phone")
+	} else if otp == "" {
+		panic("require.OTP")
+	}
 
 	details := db.Query(r.Conn, sqlstring.User_GetAccessTokenFromPhone(tel))
 	uac := details[0]
@@ -261,7 +265,7 @@ func User_OTPCheck(c *fiber.Ctx) error {
 	}
 
 	db.Execute(r.Conn, sqlstring.User_UpdateFromId(lib.T(uac, "id"), map[string]interface{}{
-			"otp_token": "Validated on "+lib.Now(),
+		"otp_token": "Validated on " + lib.Now(),
 	}))
 
 	return r.Success(nil)
