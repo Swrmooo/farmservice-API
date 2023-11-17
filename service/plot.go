@@ -85,7 +85,7 @@ func Plot_Update(c *fiber.Ctx) error {
 
 	payload := lib.GetMask(r.Payload, []string{"user_id", "name", "num", "plot_type", "code", "area", "geo_field", "lat", "lng", "address", "area_type", "detail", "land_ownership", "pics"})
 
-	// Start transaction
+	// Start transactiondd
 	trans := db.OpenTrans(r.Conn)
 	defer middleware.TryCatch(func(errStr string) {
 		trans.Rollback()
