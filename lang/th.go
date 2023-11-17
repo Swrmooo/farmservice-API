@@ -12,8 +12,10 @@ var TH map[string]string = map[string]string{
 
   "error.user.PhoneExists": "เบอร์โทรนี้มีผู้ใช้ลงทะเบียนแล้ว ไม่สามารถลงทะเบียนซ้ำได้",
   "error.user.OTPSendFailed": "ไม่สามารถส่ง OTP ได้ในขณะนี้ กรุณาลองอีกครั้งหรือติดต่อฝ่าย Support ลูกค้า",
+  "error.user.InvalidOTP": "รหัส OTP ที่ระบุไม่ถูกต้อง",
 
   "require.Id" : "ไม่พบข้อมูล ID",
+  "require.OTP" : "กรุณาระบุรหัส OTP",
   "require.Name" : "กรุณาระบุชื่อ-นามสกุล",
   "require.Username" : "กรุณาระบุชื่อผู้ใช้งานหรือเบอร์โทร",
   "require.Phone" : "กรุณาระบุเบอร์โทร",

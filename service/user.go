@@ -243,3 +243,26 @@ func User_Delete(c *fiber.Ctx) error {
 
 	return r.Success(nil)
 }
+
+func User_OTPCheck(c *fiber.Ctx) error {
+	r := middleware.GetAnonymousRequestToken(c, "fs", "User_OTPCheck")
+
+	tel := lib.T(r.Payload, "tel")
+	otp := lib.T(r.Payload, "otp")
+
+	if tel == "" { panic("require.Phone") }else
+	if otp == "" { panic("require.OTP") }
+
+	details := db.Query(r.Conn, sqlstring.User_GetAccessTokenFromPhone(tel))
+	uac := details[0]
+
+	if isValid := util.ValidateOTP(tel, lib.T(uac, "otp_token"), otp); !isValid {
+		panic("error.user.InvalidOTP")
+	}
+
+	db.Execute(r.Conn, sqlstring.User_UpdateFromId(lib.T(uac, "id"), map[string]interface{}{
+			"otp_token": "Validated on "+lib.Now(),
+	}))
+
+	return r.Success(nil)
+}
