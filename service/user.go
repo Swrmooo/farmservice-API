@@ -213,6 +213,8 @@ func User_Update(c *fiber.Ctx) error {
 	// ดึงข้อมูล User Profile จาก ID
 	detail := bu.User_Detail(id)
 
+	// Edit by Ton test merge
+
 	return r.Success(detail) // ตอบกลับ Success พร้อมค่า profile
 }
 
