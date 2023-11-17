@@ -49,6 +49,12 @@ func Vehicle_Update(c *fiber.Ctx) error {
 	if lib.T(r.Payload, "vehicle_type") == "" {
 		panic("require.Vehicle.VehicleType")
 	}
+	if lib.T(r.Payload, "license_plate") == "" {
+		panic("require.Vehicle.LicensePlate")
+	}
+	if lib.T(r.Payload, "brand") == "" {
+		panic("require.Vehicle.Brand")
+	}
 
 	payload := lib.GetMask(r.Payload, []string{"vehicle_type", "install", "vehicle", "catagory", "license_plate", "brand", "model", "driver"})
 
