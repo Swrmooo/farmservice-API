@@ -19,13 +19,8 @@ import (
 func User_Login(c *fiber.Ctx) error {
 	r := middleware.GetAnonymousRequestToken(c, "fs", "User_Login")
 
-	// username := lib.T(r.Payload, "username")
 	tel := lib.T(r.Payload, "tel")
 	pass := lib.T(r.Payload, "password")
-
-	// if username == "" {
-	// 	panic("require.Username")
-	// }
 
 	if tel == "" {
 		panic("require.Telephone")
@@ -102,10 +97,7 @@ func User_Register(c *fiber.Ctx) error {
 	r := middleware.GetAnonymousRequestToken(c, "fs", "User_Register")
 
 	id := lib.T(r.Payload, "id")
-	// firstname := lib.T(r.Payload, "firstname")
-	// lastname := lib.T(r.Payload, "lastname")
 	tel := lib.T(r.Payload, "tel")
-	//email := lib.T(r.Payload, "email")
 	password := lib.T(r.Payload, "password")
 
 	if tel == "" {
@@ -113,23 +105,11 @@ func User_Register(c *fiber.Ctx) error {
 	} else if len(tel) != 10 {
 		panic("require.PhoneNotValid")
 	}
-	if lib.T(r.Payload, "firstname") == "" || lib.T(r.Payload, "lastname") == "" {
-		panic("require.Name")
-	}
-	//if email == "" {
-	//	panic("require.Email")
-	//}
-	if password == "" {
-		panic("require.Password")
-	}
 
-	encodedPass := md5.Sum([]byte(password))
-	passMd5 := hex.EncodeToString(encodedPass[:])
-	fmt.Println("function passMd5: ", passMd5)
-	password = passMd5
-	fmt.Println("password : ", password)
+	password = lib.GenerateRandomString(10)
 
-	payload := lib.GetMask(r.Payload, []string{"tel", "firstname", "lastname", "username", "member"})
+	payload := lib.GetMask(r.Payload, []string{"tel", "firstname", "lastname", "username", "member", "password"})
+	payload["password"] = password
 
 	trans := db.OpenTrans(r.Conn)
 	defer middleware.TryCatch(func(errStr string) {
@@ -137,9 +117,6 @@ func User_Register(c *fiber.Ctx) error {
 		trans.Close()
 		panic(errStr)
 	})
-
-	// fmt.Println("service tel : ", tel)
-	// fmt.Println("service trans : ", trans)
 
 	// กรณีสร้าง User ใหม่ (ถ้าไม่ส่งค่า ID มา)
 	if id == "" {
@@ -168,28 +145,17 @@ func User_Register(c *fiber.Ctx) error {
 
 func User_Update(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "User_Update")
-	// r := middleware.GetAnonymousRequestToken(c, "fs", "User_Update")
 
 	id := lib.T(r.Payload, "id")
 	tel := lib.T(r.Payload, "tel")
-	email := lib.T(r.Payload, "email")
 	password := lib.T(r.Payload, "password")
 
-	if tel == "" {
-		panic("require.Phone")
-	}
-	if lib.T(r.Payload, "firstname") == "" || lib.T(r.Payload, "lastname") == "" {
-		panic("require.Name")
-	}
-	if email == "" {
-		panic("require.Email")
-	}
-	if password == "" {
-		panic("require.Password")
-	}
+	md5Pass := md5.Sum([]byte(password))
+	md5Str := hex.EncodeToString(md5Pass[:])
 
 	// ดึงค่า field ที่ต้องการมาจาก r.Payload เช่น tel, firstname, lastname
-	payload := lib.GetMask(r.Payload, []string{"tel", "firstname", "lastname", "password"})
+	payload := lib.GetMask(r.Payload, []string{"tel", "nickname", "firstname", "lastname", "password", "pics"})
+	payload["password"] = md5Str
 
 	// Start transaction
 	trans := db.OpenTrans(r.Conn)
@@ -205,6 +171,7 @@ func User_Update(c *fiber.Ctx) error {
 	}
 
 	// อัพเดทข้อมูล
+	fmt.Println("payload Create=====", payload)
 	trans.Execute(sqlstring.User_UpdateFromId(id, payload))
 
 	// End transaction
@@ -212,10 +179,7 @@ func User_Update(c *fiber.Ctx) error {
 	trans.Close()
 
 	// ดึงข้อมูล User Profile จาก ID
-	// ดึงข้อมูล User Profile จาก ID
 	detail := bu.User_Detail(id)
-
-	// Edit by Ton test merge
 
 	return r.Success(detail) // ตอบกลับ Success พร้อมค่า profile
 }
@@ -271,4 +235,36 @@ func User_OTPCheck(c *fiber.Ctx) error {
 	}))
 
 	return r.Success(nil)
+}
+
+func User_Payment(c *fiber.Ctx) error {
+	r := middleware.GetUserRequestToken(c, "fs", "User_Payment")
+
+	id := lib.T(r.Payload, "id")
+	member := lib.T(r.User, "member")
+
+	if id == "" {
+		panic("require.Id")
+	}
+	if member == "" {
+		panic("require.Member")
+	}
+
+	result := sqlstring.User_Exists("id", id)
+	checkId := db.Query(r.Conn, result)
+	idExist := lib.SI64(checkId[0], "COUNT(id)")
+	switch idExist {
+	case 1:
+		fmt.Printf("Successfully applied for %s level.", member)
+	default:
+		panic("User Not Exist")
+	}
+
+	payload := lib.GetMask(r.Payload, []string{"id", "member"})
+
+	db.Execute(r.Conn, sqlstring.User_UpdateFromId(id, payload))
+
+	profile := bu.User_Detail(id)
+
+	return r.Success(profile)
 }
