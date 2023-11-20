@@ -26,7 +26,7 @@ func User_UpdateTokenTime(token string) string {
 }
 
 func user_get() string {
-	sql := " SELECT id, nickname, tel, firstname, lastname, member FROM users "
+	sql := " SELECT id, nickname, firstname, lastname, tel, password, member, pics FROM users "
 	sql += " WHERE "
 	return sql
 }
@@ -62,6 +62,11 @@ func User_GetFromFilter(filter string) string {
 }
 
 func User_CreateWithPhone(tel string, pass string) string {
+	// encodedPass := md5.Sum([]byte(pass))
+	// passMd5 := hex.EncodeToString(encodedPass[:])
+	// pass = passMd5
+	// fmt.Println("passwordsqlstring=====", pass)
+
 	member := "standard"
 	sql := " insert into users (tel, username, password, member) values ('" + tel + "', '" + tel + "', '" + pass + "', '" + member + "'); "
 	return sql
@@ -78,7 +83,12 @@ func user_update(data map[string]interface{}) string {
 }
 
 func User_UpdateFromId(id string, data map[string]interface{}) string {
+	// password := data["password"].(string)
+	// md5Password := md5.Sum([]byte(password))
+	// md5PasswordStr := hex.EncodeToString(md5Password[:])
+
 	sql := user_update(data)
+	// sql += " password = '" + md5PasswordStr + "' "
 	sql += " id = '" + id + "' "
 	return sql
 }

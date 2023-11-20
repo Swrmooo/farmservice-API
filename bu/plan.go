@@ -30,7 +30,6 @@ func Plan_List(filter string) []map[string]interface{} {
 }
 
 func Plan_Create(trans db.Transaction, userId string) string {
-	//code := lib.GenerateRandomString(10)
 	code := Plan_GenCode()
 	trans.Execute(sqlstring.Plan_Create(code, userId))
 	if list := trans.Query(sqlstring.Plan_GetFromCode(code)); len(list) == 1 {
