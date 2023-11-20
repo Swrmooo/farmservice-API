@@ -83,12 +83,7 @@ func user_update(data map[string]interface{}) string {
 }
 
 func User_UpdateFromId(id string, data map[string]interface{}) string {
-	// password := data["password"].(string)
-	// md5Password := md5.Sum([]byte(password))
-	// md5PasswordStr := hex.EncodeToString(md5Password[:])
-
 	sql := user_update(data)
-	// sql += " password = '" + md5PasswordStr + "' "
 	sql += " id = '" + id + "' "
 	return sql
 }
