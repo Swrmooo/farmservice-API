@@ -62,11 +62,6 @@ func User_GetFromFilter(filter string) string {
 }
 
 func User_CreateWithPhone(tel string, pass string) string {
-	// encodedPass := md5.Sum([]byte(pass))
-	// passMd5 := hex.EncodeToString(encodedPass[:])
-	// pass = passMd5
-	// fmt.Println("passwordsqlstring=====", pass)
-
 	member := "standard"
 	sql := " insert into users (tel, username, password, member) values ('" + tel + "', '" + tel + "', '" + pass + "', '" + member + "'); "
 	return sql

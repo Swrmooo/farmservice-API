@@ -35,7 +35,6 @@ func Risk_Limit(conn string, userId string, memberType string) error {
 				panic("You've reached the maximum limit of risk area.")
 			}
 		case "premium", "enterprise":
-			// ไม่จำกัด
 		default:
 			panic("Please register as a member before using Application")
 		}
@@ -49,7 +48,6 @@ func Risk_Limit(conn string, userId string, memberType string) error {
 func Risk_List(c *fiber.Ctx) error {
 	r := middleware.GetUserRequestToken(c, "fs", "Risk_List")
 
-	// ค้นหา User จาก member, tel
 	filters := lib.GetMask(r.Payload, []string{"risk_type", "user_id", "lat", "lng", "radius"})
 	filter := " id <> 0 "
 	filter += lib.AddSqlDateRangeFilter("doc_date", lib.T(filters, "start_date"), lib.T(filters, "end_date"))
