@@ -5,7 +5,7 @@ import (
 )
 
 func Plan_Join() string {
-	sql := "SELECT p.id, p.start_date, p.end_date, p.user_id, p.vehicle_id, p.driver_id, p.plan_type, p.plan, p.code, p.status, d.firstname, d.lastname, v.num "
+	sql := "SELECT p.id, p.start_date, p.end_date, p.user_id, p.vehicle_id, p.driver_id, p.plan_type, p.plan, p.code, p.status, d.firstname, d.lastname, v.license_plate "
 	sql += "FROM plan p "
 	sql += "JOIN drivers d ON p.driver_id = d.id "
 	sql += "JOIN vehicles v ON p.vehicle_id = v.id "
